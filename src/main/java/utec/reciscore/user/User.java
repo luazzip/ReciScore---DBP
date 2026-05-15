@@ -47,8 +47,7 @@ public class User {
     @Column(nullable = false)
     private Double multiplier = 1.0;
 
-    private URL profilePicture; //antes string
-
+    private String profilePicture; //antes string
     private String location;
 
     @Min(value = 0)
