@@ -1,12 +1,12 @@
-package utec.reciscore.PuntoMapa.model;
+package utec.reciscore.puntoMapa.model;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
-import utec.reciscore.PuntoMapa.dto.PuntoMapaRequestDTO;
-import utec.reciscore.PuntoMapa.dto.PuntoMapaResponseDTO;
-import utec.reciscore.PuntoMapa.infrastructure.PuntoMapaRepository;
+import utec.reciscore.puntoMapa.dto.PuntoMapaRequestDTO;
+import utec.reciscore.puntoMapa.dto.PuntoMapaResponseDTO;
+import utec.reciscore.puntoMapa.infrastructure.PuntoMapaRepository;
 
 import java.util.List;
 import java.util.Optional;

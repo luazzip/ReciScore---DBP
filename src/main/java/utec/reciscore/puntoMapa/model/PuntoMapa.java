@@ -1,4 +1,4 @@
-package utec.reciscore.PuntoMapa.model;
+package utec.reciscore.puntoMapa.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
