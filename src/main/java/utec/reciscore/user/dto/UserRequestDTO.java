@@ -1,6 +1,5 @@
-package utec.reciscore.user;
+package utec.reciscore.user.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
