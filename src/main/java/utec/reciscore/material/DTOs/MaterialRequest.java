@@ -1,4 +1,4 @@
-package utec.reciscore.Material.DTOs;
+package utec.reciscore.material.DTOs;
 
 import lombok.*;
 

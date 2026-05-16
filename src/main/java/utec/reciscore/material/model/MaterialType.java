@@ -1,4 +1,4 @@
-package utec.reciscore.Material.model;
+package utec.reciscore.material.model;
 
 public enum MaterialType {
     PLASTICO,

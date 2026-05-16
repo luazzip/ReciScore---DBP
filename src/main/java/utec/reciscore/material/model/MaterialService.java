@@ -1,8 +1,8 @@
-package utec.reciscore.Material.model;
+package utec.reciscore.material.model;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import utec.reciscore.Material.infraestructure.MaterialRepository;
+import utec.reciscore.material.infraestructure.MaterialRepository;
 
 @Service
 public class MaterialService {
