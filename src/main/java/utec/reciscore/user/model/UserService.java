@@ -1,9 +1,12 @@
-package utec.reciscore.user;
+package utec.reciscore.user.model;
 
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import utec.reciscore.user.dto.UserRequestDTO;
+import utec.reciscore.user.dto.UserResponseDTO;
+import utec.reciscore.user.infraestructure.UserRepository;
 
 @Service
 @RequiredArgsConstructor

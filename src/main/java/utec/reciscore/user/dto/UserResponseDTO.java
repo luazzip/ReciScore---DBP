@@ -1,4 +1,4 @@
-package utec.reciscore.user;
+package utec.reciscore.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
