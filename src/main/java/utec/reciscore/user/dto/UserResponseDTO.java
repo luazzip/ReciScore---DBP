@@ -1,9 +1,12 @@
 package utec.reciscore.user.dto;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,4 +22,7 @@ public class UserResponseDTO {
     private String profilePicture;
     private String location;
     private Integer reciclajes;
+    private Integer nivel;
+    private Integer rachaDias;
+    private LocalDateTime fechaRegistro;
 }
