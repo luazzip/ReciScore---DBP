@@ -1,6 +1,6 @@
 package utec.reciscore.material.model;
 
-public enum MaterialType {
+public enum CatalogoMaterial {
     PLASTICO,
     VIDRIO,
     PAPEL,
