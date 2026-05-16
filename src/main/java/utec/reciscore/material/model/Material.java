@@ -1,4 +1,4 @@
-package utec.reciscore.Material.model;
+package utec.reciscore.material.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

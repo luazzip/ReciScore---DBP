@@ -2,37 +2,31 @@ package utec.reciscore.user;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.net.URL;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Email(message = "El correo debe ser válido")
-    @NotBlank(message = "El correo no puede estar vacío")
+
     @Column(nullable = false, unique = true)
     private String email;
 
-    @NotBlank(message = "La contraseña no puede estar vacía")
     @Column(nullable = false)
     private String password;
 
-    @NotBlank(message = "El nombre no puede estar vacío")
     @Column(nullable = false)
     private String name;
 
@@ -47,7 +41,7 @@ public class User {
     @Column(nullable = false)
     private Double multiplier = 1.0;
 
-    private String profilePicture; //antes string
+    private String profilePicture;
     private String location;
 
     @Min(value = 0)
