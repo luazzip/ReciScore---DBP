@@ -37,4 +37,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body("Ya existe un material con ese nombre.");
     }
 
+    @ExceptionHandler(DuplicateUserException.class)
+    public ResponseEntity<String> handleDuplicateUser(DuplicateUserException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
+    }
+
+
+
 }
