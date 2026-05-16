@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import utec.reciscore.exceptions.DuplicateUserException;
 import utec.reciscore.user.dto.UserRequestDTO;
 import utec.reciscore.user.dto.UserResponseDTO;
-import utec.reciscore.user.infraestructure.UserRepository;
+import utec.reciscore.user.infrastructure.UserRepository;
 
 @Service
 @RequiredArgsConstructor

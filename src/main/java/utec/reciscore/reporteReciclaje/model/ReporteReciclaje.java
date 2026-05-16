@@ -3,7 +3,8 @@ package utec.reciscore.reporteReciclaje.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import utec.reciscore.material.model.CatalogoMaterial;
+import lombok.NoArgsConstructor;
+import utec.reciscore.material.model.Material;
 import utec.reciscore.puntoMapa.model.PuntoMapa;
 import utec.reciscore.user.model.User;
 
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "reporte_reciclaje")
 @Data
+@NoArgsConstructor
 public class ReporteReciclaje {
 
     @Id
@@ -19,12 +21,12 @@ public class ReporteReciclaje {
     private Long numeroReporte;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User usuario;
 
     @ManyToOne
     @JoinColumn(name = "material_id", nullable = false)
-    private CatalogoMaterial material;
+    private Material material;
 
     @ManyToOne
     @JoinColumn(name = "punto_mapa_id")
