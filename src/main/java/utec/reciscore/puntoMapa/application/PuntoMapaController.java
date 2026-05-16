@@ -1,12 +1,11 @@
-package utec.reciscore.PuntoMapa.application;
+package utec.reciscore.puntoMapa.application;
 
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import utec.reciscore.PuntoMapa.dto.PuntoMapaRequestDTO;
-import utec.reciscore.PuntoMapa.dto.PuntoMapaResponseDTO;
-import utec.reciscore.PuntoMapa.model.PuntoMapa;
-import utec.reciscore.PuntoMapa.model.PuntoMapaService;
+import utec.reciscore.puntoMapa.dto.PuntoMapaRequestDTO;
+import utec.reciscore.puntoMapa.dto.PuntoMapaResponseDTO;
+import utec.reciscore.puntoMapa.model.PuntoMapaService;
 
 import java.util.List;
 

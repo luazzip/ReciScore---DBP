@@ -1,4 +1,4 @@
-package utec.reciscore.PuntoMapa.dto;
+package utec.reciscore.puntoMapa.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

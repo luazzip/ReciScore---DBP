@@ -1,4 +1,4 @@
-package utec.reciscore.PuntoMapa.dto;
+package utec.reciscore.puntoMapa.dto;
 
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;

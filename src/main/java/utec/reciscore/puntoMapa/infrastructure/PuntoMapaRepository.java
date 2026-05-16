@@ -1,9 +1,9 @@
-package utec.reciscore.PuntoMapa.infrastructure;
+package utec.reciscore.puntoMapa.infrastructure;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import utec.reciscore.PuntoMapa.model.PuntoMapa;
+import utec.reciscore.puntoMapa.model.PuntoMapa;
 
 import java.util.List;
 
