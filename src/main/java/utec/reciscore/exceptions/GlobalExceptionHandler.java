@@ -1,5 +1,6 @@
 package utec.reciscore.exceptions;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -24,6 +25,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<String> handleNotEncontrado(NoSuchElementException exception){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Punto en el mapa no encontrado.");
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleCategoriaInvalida(IllegalArgumentException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Categoría inválida. Los valores permitidos son: PLASTICO, VIDRIO, PAPEL, METAL.");
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> handleDuplicado(DataIntegrityViolationException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Ya existe un material con ese nombre.");
     }
 
 }
