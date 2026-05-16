@@ -30,7 +30,7 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @Min(value = 0, message = "Los puntos no pueden ser negativos")

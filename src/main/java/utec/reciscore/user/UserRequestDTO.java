@@ -23,7 +23,9 @@ public class UserRequestDTO {
 
     @NotBlank(message = "El nombre no puede estar vacío")
     private String name;
+
     @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "El username solo puede contener letras, números y guion bajo")
+    @NotBlank(message = "El nombre no puede estar vacío")
     private String username;
     private String profilePicture;
     private String location;
