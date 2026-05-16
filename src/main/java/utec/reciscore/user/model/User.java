@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,9 +44,28 @@ public class User {
     private Double multiplier = 1.0;
 
     private String profilePicture;
+
     private String location;
 
     @Min(value = 0)
     @Column(nullable = false)
     private Integer reciclajes = 0;
+
+    @Column(nullable = false)
+    private Integer nivel = 1;
+
+    @Column(nullable = false)
+    private Integer rachaDias = 0;
+
+    private LocalDateTime fechaRegistro;
+
+    private LocalDateTime ultimoLogin;
+
+    @PrePersist //para fecha inicial automático
+    public void prePersist() {
+        this.fechaRegistro = LocalDateTime.now();
+    }
+
+
+
 }
