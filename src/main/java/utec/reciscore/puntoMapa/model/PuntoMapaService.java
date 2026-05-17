@@ -1,14 +1,17 @@
 package utec.reciscore.puntoMapa.model;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
+import utec.reciscore.desafio.model.Desafio;
 import utec.reciscore.puntoMapa.dto.PuntoMapaRequestDTO;
 import utec.reciscore.puntoMapa.dto.PuntoMapaResponseDTO;
 import utec.reciscore.puntoMapa.infrastructure.PuntoMapaRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -18,6 +21,7 @@ public class PuntoMapaService {
 
     @Autowired
     private final PuntoMapaRepository puntoMapaRepository;
+    private final ModelMapper modelMapper;
 
     public PuntoMapaResponseDTO crear(PuntoMapaRequestDTO puntoMapa){
         PuntoMapa punto = new PuntoMapa();
@@ -27,11 +31,18 @@ public class PuntoMapaService {
     }
 
     public List<PuntoMapaResponseDTO> obtenerTodos() {
-        return puntoMapaRepository.findAll().stream().map(this::toDto).toList();
+        List<PuntoMapa> puntoMapas=puntoMapaRepository.findAll();
+
+        if (puntoMapas.isEmpty()) {
+            throw new NoSuchElementException("No existen puntos en el mapa registrados");
+        }
+        return puntoMapas.stream().map(this::toDto).toList();
     }
 
-    public Optional<PuntoMapaResponseDTO> buscarPorId(Long id) {
-        return puntoMapaRepository.findById(id).map(this::toDto);
+    public PuntoMapaResponseDTO buscarPorId(Long id) {
+        PuntoMapa puntoMapa=puntoMapaRepository.findById(id)
+                .orElseThrow(()->new NoSuchElementException("No se encontró el dasfío con id: "+id));
+        return modelMapper.map(puntoMapa,PuntoMapaResponseDTO.class);
     }
 
     public void eliminar(@PathVariable Long id) {

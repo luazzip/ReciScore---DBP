@@ -30,9 +30,8 @@ public class PuntoMapaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PuntoMapaResponseDTO> buscarPorId(@PathVariable Long id) {
-        return puntoMapaService.buscarPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        PuntoMapaResponseDTO response=puntoMapaService.buscarPorId(id);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")

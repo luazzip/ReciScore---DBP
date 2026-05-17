@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import utec.reciscore.desafio.dto.CreateDesafioRequest;
 import utec.reciscore.desafio.dto.DetailDesafioResponse;
 import utec.reciscore.desafio.dto.ListDesafioResponse;
+import utec.reciscore.desafio.dto.UpdateDesafioRequest;
 import utec.reciscore.desafio.model.DesafioService;
 
 import java.util.List;
@@ -33,5 +34,26 @@ public class DesafioController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return ResponseEntity.ok(desafios);
+    }
+
+    //Obtener desafios por id
+    @GetMapping("/{id}")
+    public ResponseEntity<DetailDesafioResponse> getDesafioById(@PathVariable Long id) {
+        DetailDesafioResponse response=desafioService.findById(id);
+        return ResponseEntity.ok(response);
+    }
+
+    //Unirse a desafio (usuario acepta un desafio)
+    @PostMapping("/{id}/unirse")
+    public ResponseEntity<DetailDesafioResponse> unirse(@PathVariable Long id,@RequestParam Long userId) {
+        DetailDesafioResponse response=desafioService.unirse(id,userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    //editar desafio
+    @PatchMapping("/{id}")
+    public ResponseEntity<DetailDesafioResponse> updateDesafio(@PathVariable Long id, @RequestBody UpdateDesafioRequest request) {
+        DetailDesafioResponse response=desafioService.updateDesafio(id,request);
+        return ResponseEntity.ok(response);
     }
 }

@@ -6,8 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import utec.reciscore.user.model.User;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "desafio")
@@ -45,4 +48,13 @@ public class Desafio {
 
     @Column(nullable = false)
     private Boolean activo;
+
+    //relacion con usuarios
+    @ManyToMany
+    @JoinTable(
+            name = "user_desafio",
+            joinColumns = @JoinColumn(name = "desafio_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> usuariosInscritos=new HashSet<>();
 }

@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
+    //validaciones de dto con @Valid
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String,String>> handleValidation(MethodArgumentNotValidException exception){
         Map<String,String> errores = new HashMap<>();
@@ -22,24 +22,28 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errores);
     }
 
+    //no encontrado
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<String> handleNotEncontrado(NoSuchElementException exception){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Punto en el mapa no encontrado.");
+    public ResponseEntity<String> handleNotFound(NoSuchElementException exception){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 
+    //validaciones de negocio
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleCategoriaInvalida(IllegalArgumentException exception) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Categoría inválida. Los valores permitidos son: PLASTICO, VIDRIO, PAPEL, METAL.");
+    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage()); //"Categoría inválida. Los valores permitidos son: PLASTICO, VIDRIO, PAPEL, METAL."
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<String> handleDuplicado(DataIntegrityViolationException exception) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("Ya existe un material con ese nombre.");
-    }
-
-    @ExceptionHandler(DuplicateUserException.class)
-    public ResponseEntity<String> handleDuplicateUser(DuplicateUserException exception) {
+    //conflictos por duplicado
+    @ExceptionHandler({DataIntegrityViolationException.class, DuplicateUserException.class})
+    public ResponseEntity<String> handleDuplicate(Exception exception) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
+    }
+
+    //fallback general
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleGeneral(Exception exception) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado");
     }
 
 
