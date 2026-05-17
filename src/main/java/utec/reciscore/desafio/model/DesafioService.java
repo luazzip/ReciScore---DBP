@@ -6,7 +6,10 @@ import org.springframework.stereotype.Service;
 import utec.reciscore.desafio.dto.CreateDesafioRequest;
 import utec.reciscore.desafio.dto.DetailDesafioResponse;
 import utec.reciscore.desafio.dto.ListDesafioResponse;
+import utec.reciscore.desafio.dto.UpdateDesafioRequest;
 import utec.reciscore.desafio.infraestructure.DesafioRepository;
+import utec.reciscore.user.infrastructure.UserRepository;
+import utec.reciscore.user.model.User;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -15,9 +18,10 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class DesafioService {
     private final DesafioRepository desafioRepository;
+    private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    //crear desafio
+    //----------------------- crear desafio --------------------------
     public DetailDesafioResponse createDesafio(CreateDesafioRequest request){
         if (desafioRepository.existsByCategoria(request.getCategoria())) {
             throw new IllegalArgumentException("La categoria ya existe");
@@ -32,7 +36,8 @@ public class DesafioService {
         return modelMapper.map(saved,DetailDesafioResponse.class);
     }
 
-    //obtener desafios
+
+    //----------------------- obtener desafios -------------------------
     public List<ListDesafioResponse> findAll() {
         List<Desafio> desafios=desafioRepository.findAll();
 
@@ -43,5 +48,62 @@ public class DesafioService {
         return desafios.stream()
                 .map(desafio -> modelMapper.map(desafio,ListDesafioResponse.class))
                 .toList();
+    }
+
+
+    //------------------------- obtener desafio por id ----------------------
+    public DetailDesafioResponse findById(Long id) {
+        Desafio desafio=desafioRepository.findById(id)
+                .orElseThrow(()-> new NoSuchElementException("No se encontró el desafío con id: "+ id));
+
+        return modelMapper.map(desafio,DetailDesafioResponse.class);
+    }
+
+
+    //-------------------- usuario se une o acepta desafio -------------------
+    public DetailDesafioResponse unirse(Long desafioId,Long userId) {
+        //buscar desafio
+        Desafio desafio=desafioRepository.findById(desafioId)
+                .orElseThrow(()-> new NoSuchElementException("No se encontró el desafío con id: "+ desafioId));
+
+        //buscar usuario
+        User user=userRepository.findById(userId)
+                .orElseThrow(()-> new NoSuchElementException("No se encontró el usuario con id: "+ userId));
+
+        //validar si ya esta inscrito
+        if (desafio.getUsuariosInscritos().contains(user)) {
+            throw new IllegalArgumentException("El usuario ya está inscrito en este desafío");
+        }
+
+        //agregar inscripcion
+        desafio.getUsuariosInscritos().add(user);
+        Desafio actualizado=desafioRepository.save(desafio);
+
+        return modelMapper.map(actualizado,DetailDesafioResponse.class);
+    }
+
+
+    //------------------------- editar desafio --------------------------------
+    public DetailDesafioResponse updateDesafio(Long id, UpdateDesafioRequest request) {
+        //buscar desafio
+        Desafio desafio=desafioRepository.findById(id)
+                .orElseThrow(()-> new NoSuchElementException("No se encontró el desafío con id: "+ id));
+
+        //actualizar campos si vienen en el request
+        if (request.getTitulo()!=null) {
+            desafio.setTitulo(request.getTitulo());
+        }
+        if (request.getDescripcion()!=null) {
+            desafio.setDescripcion(request.getDescripcion());
+        }
+        if (request.getCategoria()!=null) {
+            desafio.setCategoria(request.getCategoria());
+        }
+        if (request.getActivo()!=null) {
+            desafio.setActivo(request.getActivo());
+        }
+
+        Desafio actualizado=desafioRepository.save(desafio);
+        return modelMapper.map(actualizado,DetailDesafioResponse.class);
     }
 }
