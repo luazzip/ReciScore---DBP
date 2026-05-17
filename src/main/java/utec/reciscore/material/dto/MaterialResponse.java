@@ -1,4 +1,4 @@
-package utec.reciscore.material.dtos;
+package utec.reciscore.material.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

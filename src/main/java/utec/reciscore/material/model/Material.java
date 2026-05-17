@@ -24,7 +24,7 @@ public class Material{
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private MaterialType category;
+    private TipoMaterial category;
 
     private Boolean recyclable;
 
