@@ -49,7 +49,7 @@ public class ReporteReciclajeService {
 
         if (gpsValido && iaValida) {
             double pesoTotal = material.getPointsPerKg() * dto.getNumeroArticulos();
-            int puntosGanados = (int) Math.round(pesoTotal);
+            int puntosGanados = (int) Math.round(pesoTotal * user.getMultiplier());
             user.setPoints(user.getPoints() + puntosGanados);
             userRepository.save(user);
         }
