@@ -27,6 +27,8 @@ public class PuntoMapaService {
         PuntoMapa punto = new PuntoMapa();
         punto.setLatitude(puntoMapa.getLatitude());
         punto.setLongitude(puntoMapa.getLongitude());
+        punto.setNombre(puntoMapa.getNombre());
+        punto.setTipo(puntoMapa.getTipo());
         return toDto(puntoMapaRepository.save(punto));
     }
 
@@ -59,6 +61,8 @@ public class PuntoMapaService {
         dto.setId(punto.getId());
         dto.setLatitude(punto.getLatitude());
         dto.setLongitude(punto.getLongitude());
+        dto.setNombre(punto.getNombre());
+        dto.setTipo(punto.getTipo());
         return dto;
     }
 }
