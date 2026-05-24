@@ -3,6 +3,7 @@ package utec.reciscore.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,13 +21,23 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
+        http.csrf(csrf->csrf.disable())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
-                        .anyRequest().authenticated())
+
+                        .requestMatchers(HttpMethod.POST, "/material/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/desafios/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/puntos-mapa/**").hasRole("ADMIN")
+
+                        .requestMatchers("/reportes-reciclaje/**").hasRole("USER")
+                        .requestMatchers("/desafios/*/unirse").hasRole("USER")
+                        .requestMatchers("/reciclajes/**").hasRole("USER")
+
+                        .anyRequest().authenticated()
+                )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.headers(headers -> headers.frameOptions(frame -> frame.disable()));

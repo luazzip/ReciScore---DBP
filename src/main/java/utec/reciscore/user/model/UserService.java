@@ -31,11 +31,12 @@ public class UserService implements UserDetailsService {
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getEmail())
                 .password(user.getPassword())
-                .authorities("ROLE_USER")
+                .authorities("ROLE_" + user.getRole().name())
                 .build();
     }
 
 
+    //create
     public UserResponseDTO create(UserRequestDTO dto) {
 
         if (userRepository.existsByEmail(dto.getEmail())) {
@@ -55,12 +56,14 @@ public class UserService implements UserDetailsService {
         return modelMapper.map(savedUser, UserResponseDTO.class);
     }
 
+    //getById
     public UserResponseDTO getById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
         return modelMapper.map(user, UserResponseDTO.class);
     }
 
+    //update
     public UserResponseDTO update(Long id, UserUpdateDTO dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));

@@ -66,6 +66,8 @@ public class User {
         this.fechaRegistro = LocalDateTime.now();
     }
 
-
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role = Role.USER;
 
 }
