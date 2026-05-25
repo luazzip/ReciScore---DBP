@@ -102,5 +102,4 @@ public class UserService implements UserDetailsService {
 
         userRepository.delete(userToDelete);
     }
-
 }

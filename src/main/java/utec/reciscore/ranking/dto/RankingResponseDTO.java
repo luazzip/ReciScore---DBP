@@ -14,3 +14,4 @@ public class RankingResponseDTO {
     private Integer nivel;
     private Integer posicion;
 }
+
