@@ -1,8 +1,10 @@
 package utec.reciscore.reporteZona.model;
 
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import utec.reciscore.user.infrastructure.UserRepository;
 import utec.reciscore.user.model.User;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -115,6 +118,35 @@ public class ReporteZonaService {
                 .toList();
     }
 
+    //delete
+
+    @Transactional
+    public void delete(Long id) {
+
+        ReporteZona reporte = reporteZonaRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Reporte no encontrado"));
+
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
+        assert authentication != null;
+
+        String currentEmail = authentication.getName();
+
+        boolean isAdmin = authentication.getAuthorities()
+                .stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
+        boolean isOwner = reporte.getUser().getEmail().equals(currentEmail);
+
+        if (!isAdmin && !isOwner) {
+            throw new AccessDeniedException("No puedes eliminar este reporte");
+        }
 
 
+
+
+
+    }
 }
