@@ -2,6 +2,7 @@ package utec.reciscore.user.application;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import utec.reciscore.user.dto.UserRequestDTO;
@@ -20,8 +21,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public UserResponseDTO create(@RequestBody @Valid UserRequestDTO dto) {
-        return userService.create(dto);
+    public ResponseEntity<UserResponseDTO> create(@RequestBody @Valid UserRequestDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(dto));
     }
 
     @GetMapping("/{id}")

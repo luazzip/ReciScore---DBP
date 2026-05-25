@@ -1,7 +1,9 @@
 package utec.reciscore.reporteReciclaje.model;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import utec.reciscore.email.ReciclajeValidadoEvent;
 import utec.reciscore.material.model.Material;
 import utec.reciscore.puntoMapa.model.PuntoMapaService;
 import utec.reciscore.reporteReciclaje.dto.ReporteReciclajeRequestDTO;
@@ -19,6 +21,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ReporteReciclajeService {
 
+    private final ApplicationEventPublisher eventPublisher;
     private final ReporteReciclajeRepository reporteRepository;
     private final UserRepository userRepository;
     private final MaterialRepository materialRepository;
@@ -52,6 +55,8 @@ public class ReporteReciclajeService {
             int puntosGanados = (int) Math.round(pesoTotal * user.getMultiplier());
             user.setPoints(user.getPoints() + puntosGanados);
             userRepository.save(user);
+            eventPublisher.publishEvent(new ReciclajeValidadoEvent(
+                    this, user.getEmail(), puntosGanados, material.getName()));
         }
 
         return toDto(reporteRepository.save(reporte));
