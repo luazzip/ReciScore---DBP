@@ -1,22 +1,24 @@
 package utec.reciscore.auth;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import utec.reciscore.email.UsuarioRegistradoEvent;
+import utec.reciscore.exceptions.ResourceNotFoundException;
 import utec.reciscore.user.infrastructure.UserRepository;
 import utec.reciscore.user.model.User;
-
-import org.springframework.context.ApplicationEventPublisher;
-import utec.reciscore.email.UsuarioRegistradoEvent;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final ApplicationEventPublisher eventPublisher;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final ApplicationEventPublisher eventPublisher;
+
+    // ─────────────────────── REGISTER ───────────────────────
 
     public AuthResponseDTO register(RegisterRequestDTO dto) {
         if (userRepository.existsByEmail(dto.getEmail())) {
@@ -32,12 +34,17 @@ public class AuthService {
         user.setName(dto.getName());
         user.setUsername(dto.getUsername());
 
-        userRepository.save(user);
-        eventPublisher.publishEvent(new UsuarioRegistradoEvent(this, user.getEmail(), user.getName()));
+        User saved = userRepository.save(user);
 
-        String token = jwtService.generateToken(user.getEmail());
-        return new AuthResponseDTO(token);
+        // Evento asíncrono → EmailService envía bienvenida
+        eventPublisher.publishEvent(
+                new UsuarioRegistradoEvent(this, saved.getEmail(), saved.getName())
+        );
+
+        return buildResponse(saved);
     }
+
+    // ─────────────────────── LOGIN ──────────────────────────
 
     public AuthResponseDTO login(LoginRequestDTO dto) {
         User user = userRepository.findByEmail(dto.getEmail())
@@ -47,7 +54,31 @@ public class AuthService {
             throw new IllegalArgumentException("Credenciales inválidas");
         }
 
-        String token = jwtService.generateToken(user.getEmail());
-        return new AuthResponseDTO(token);
+        return buildResponse(user);
+    }
+
+    // ─────────────────────── REFRESH ────────────────────────
+
+    public AuthResponseDTO refresh(String refreshToken) {
+        // Valida que sea un refresh token (no un access token reutilizado)
+        if (!jwtService.isRefreshToken(refreshToken)) {
+            throw new IllegalArgumentException("Token inválido: no es un refresh token");
+        }
+
+        String email = jwtService.extractEmail(refreshToken);
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+
+        return buildResponse(user);
+    }
+
+    // ─────────────────────── HELPER ─────────────────────────
+
+    private AuthResponseDTO buildResponse(User user) {
+        String accessToken  = jwtService.generateToken(
+                user.getEmail(), user.getId(), user.getRole().name());
+        String refreshToken = jwtService.generateRefreshToken(user.getEmail());
+        return new AuthResponseDTO(accessToken, refreshToken);
     }
 }

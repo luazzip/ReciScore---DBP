@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ReporteReciclaje {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long numeroReporte;
