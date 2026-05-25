@@ -3,6 +3,9 @@ package utec.reciscore.user.model;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -75,4 +78,28 @@ public class UserService implements UserDetailsService {
         return modelMapper.map(userRepository.save(user), UserResponseDTO.class);
     }
 
+    public void delete(Long id) {
+
+        User userToDelete = userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
+
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
+        assert authentication != null;
+        String currentEmail = authentication.getName();
+
+        boolean isAdmin = authentication.getAuthorities()
+                .stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
+        boolean isSameUser = userToDelete.getEmail().equals(currentEmail);
+
+        if (!isAdmin && !isSameUser) {
+            throw new AccessDeniedException("No puedes eliminar otra cuenta");
+        }
+
+        userRepository.delete(userToDelete);
+    }
 }
