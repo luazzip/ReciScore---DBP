@@ -27,6 +27,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/material/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/desafios/**").hasRole("ADMIN")
@@ -36,6 +37,7 @@ public class SecurityConfig {
                         .requestMatchers("/desafios/*/unirse").hasRole("USER")
                         .requestMatchers("/reciclajes/**").hasRole("USER")
 
+                        .requestMatchers(HttpMethod.DELETE, "/users/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
