@@ -19,15 +19,11 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
-    @Mock
-    private UserRepository userRepository;
-    @Mock
-    private PasswordEncoder passwordEncoder;
-    @Mock
-    private JwtService jwtService;
-
-    @InjectMocks
-    private AuthService authService;
+    @Mock private UserRepository userRepository;
+    @Mock private PasswordEncoder passwordEncoder;
+    @Mock private JwtService jwtService;
+    @Mock private org.springframework.context.ApplicationEventPublisher eventPublisher;
+    @InjectMocks private AuthService authService;
 
     private RegisterRequestDTO registerDTO;
     private LoginRequestDTO loginDTO;
@@ -53,7 +49,7 @@ class AuthServiceTest {
     }
 
     @Test
-    void register_exitoso() {
+    void shouldReturnTokenWhenRegisterIsSuccessful() {
         when(userRepository.existsByEmail(anyString())).thenReturn(false);
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         when(passwordEncoder.encode(anyString())).thenReturn("hashedPassword");
@@ -68,28 +64,24 @@ class AuthServiceTest {
     }
 
     @Test
-    void register_emailDuplicado_lanzaExcepcion() {
+    void shouldThrowExceptionWhenEmailAlreadyExists() {
         when(userRepository.existsByEmail(anyString())).thenReturn(true);
 
-        assertThrows(IllegalArgumentException.class,
-                () -> authService.register(registerDTO));
-
+        assertThrows(IllegalArgumentException.class, () -> authService.register(registerDTO));
         verify(userRepository, never()).save(any());
     }
 
     @Test
-    void register_usernameDuplicado_lanzaExcepcion() {
+    void shouldThrowExceptionWhenUsernameAlreadyExists() {
         when(userRepository.existsByEmail(anyString())).thenReturn(false);
         when(userRepository.existsByUsername(anyString())).thenReturn(true);
 
-        assertThrows(IllegalArgumentException.class,
-                () -> authService.register(registerDTO));
-
+        assertThrows(IllegalArgumentException.class, () -> authService.register(registerDTO));
         verify(userRepository, never()).save(any());
     }
 
     @Test
-    void login_exitoso() {
+    void shouldReturnTokenWhenLoginCredentialsAreValid() {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
         when(jwtService.generateToken(anyString())).thenReturn("token123");
@@ -101,19 +93,17 @@ class AuthServiceTest {
     }
 
     @Test
-    void login_passwordIncorrecta_lanzaExcepcion() {
+    void shouldThrowExceptionWhenPasswordIsIncorrect() {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
-        assertThrows(IllegalArgumentException.class,
-                () -> authService.login(loginDTO));
+        assertThrows(IllegalArgumentException.class, () -> authService.login(loginDTO));
     }
 
     @Test
-    void login_usuarioNoExiste_lanzaExcepcion() {
+    void shouldThrowExceptionWhenUserDoesNotExist() {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class,
-                () -> authService.login(loginDTO));
+        assertThrows(IllegalArgumentException.class, () -> authService.login(loginDTO));
     }
 }

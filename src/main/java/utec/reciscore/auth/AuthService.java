@@ -6,10 +6,14 @@ import org.springframework.stereotype.Service;
 import utec.reciscore.user.infrastructure.UserRepository;
 import utec.reciscore.user.model.User;
 
+import org.springframework.context.ApplicationEventPublisher;
+import utec.reciscore.email.UsuarioRegistradoEvent;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
+    private final ApplicationEventPublisher eventPublisher;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -29,6 +33,7 @@ public class AuthService {
         user.setUsername(dto.getUsername());
 
         userRepository.save(user);
+        eventPublisher.publishEvent(new UsuarioRegistradoEvent(this, user.getEmail(), user.getName()));
 
         String token = jwtService.generateToken(user.getEmail());
         return new AuthResponseDTO(token);
