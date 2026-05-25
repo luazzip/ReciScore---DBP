@@ -1,18 +1,17 @@
       
 UNIVERSIDAD DE INGENIERÍA Y TECNOLOGÍA
 
-![][image1]
 
-**ReciScore**  
+***ReciScore***  
 Plataforma Inteligente de   
 Validación y Gamificación del Reciclaje
 
 **Integrantes:**
 
 - Gamero Goyzueta, Ximena \- Código: 202510310  
-- Geraldo Soto, Joseph \- Código:   
+- Geraldo Soto, Joseph \- Código: 202510412  
 - Meniz Cueva, Luana Yolanda  \- Código: 202510593  
-- Nieva Carbajal, Luis Enrique \- Código: 
+- Nieva Carbajal, Luis Enrique \- Código: 202510344
 
 
  
@@ -23,119 +22,10 @@ Yarasca Moscol, Julio Eduardo
 **Asignatura:**  
 Desarrollo Basado en Plataformas (CS2031)
 
-**Indice**  
-				  
-											           **Pág.**
 
-[**1\. Introducción	4**](#introducción)
+# 1.  Introducción
 
-[1.1. Contexto	4](#contexto)
-
-[1.2. Objetivos del proyecto	4](#objetivos-del-proyecto)
-
-[**2\. Identificación del Problema o Necesidad	4**](#identificación-del-problema-o-necesidad)
-
-[2.1. Descripción del Problema	4](#descripción-del-problema)
-
-[2.2. Justificación	5](#justificación)
-
-[**3\. Descripción de la Solución	5**](#descripción-de-la-solución)
-
-[Funcionalidades implementadas	5](#funcionalidades-implementadas)
-
-[3.1. Autenticación y Gestión de Usuarios	5](#autenticación-y-gestión-de-usuarios)
-
-[3.2. Puntos de Mapa y Geolocalización	6](#puntos-de-mapa-y-geolocalización)
-
-[3.3. Registro de Reciclaje con Validación Multicapa	6](#registro-de-reciclaje-con-validación-multicapa)
-
-[3.4. Desafíos Diarios y Semanales	7](#desafíos-diarios-y-semanales)
-
-[3.5. Sistema de Badges	7](#sistema-de-badges)
-
-[3.6. Ranking Público por Distrito	7](#ranking-público-por-distrito)
-
-[3.7. Historial de Reciclajes	7](#historial-de-reciclajes)
-
-[Tecnologías utilizadas	7](#tecnologías-utilizadas)
-
-[**4\. Modelo de Entidades	8**](#modelo-de-entidades)
-
-[4.1. Entidades Principales	8](#entidades-principales)
-
-[4.1.1. Usuario	8](#usuario)
-
-[4.1.2. Materiales	9](#materiales)
-
-[4.1.3. ReporteReciclaje	9](#reportereciclaje)
-
-[4.1.4. PuntoMapa	10](#puntomapa)
-
-[4.1.5. Desafio	10](#desafio)
-
-[4.1.6. ReporteZona	10](#reportezona)
-
-[4.1.7. Ranking	10](#ranking)
-
-[4.2. Diagrama Entidad-Relación	11](#diagrama-entidad-relación)
-
-[**5\. Testing y Manejo de Errores	11**](#testing-y-manejo-de-errores)
-
-[5.1. Niveles de Testing Realizados	11](#niveles-de-testing-realizados)
-
-[5.2. Resultados	11](#resultados)
-
-[5.3. Manejo de Errores	12](#manejo-de-errores)
-
-[**6\. Medidas de Seguridad Implementadas	12**](#medidas-de-seguridad-implementadas)
-
-[6.1. Seguridad de Datos	12](#seguridad-de-datos)
-
-[6.1.1. Autenticación JWT	12](#autenticación-jwt)
-
-[6.1.2. Cifrado de Contraseñas	12](#cifrado-de-contraseñas)
-
-[6.2. Prevención de Vulnerabilidades	13](#prevención-de-vulnerabilidades)
-
-[**7\. Eventos y Asincronía	13**](#eventos-y-asincronía)
-
-[7.1. Eventos Utilizados	13](#eventos-utilizados)
-
-[7.1.1. Validación de Imágenes	13](#validación-de-imágenes)
-
-[7.1.2. Validación GPS	13](#validación-gps)
-
-[7.1.3. Cálculo de Rankings	13](#cálculo-de-rankings)
-
-[7.2. Importancia de la Asincronía	14](#importancia-de-la-asincronía)
-
-[7.3. Flujo Asincrónico	14](#flujo-asincrónico)
-
-[**8\. GitHub & Management	14**](#github-&-management)
-
-[**8.1. GitHub Projects	14**](#github-projects)
-
-[8.2. Organización del Trabajo	14](#organización-del-trabajo)
-
-[8.3. GitHub Actions	15](#github-actions)
-
-[**9\. Conclusión	15**](#conclusión)
-
-[**9.1. Logros del Proyecto	15**](#logros-del-proyecto)
-
-[9.2. Aprendizajes Clave	15](#aprendizajes-clave)
-
-[9.3. Trabajo Futuro	16](#trabajo-futuro)
-
-[**10\. Apéndices	16**](#apéndices)
-
-[**10.1. Licencia	16**](#licencia)
-
-[**10.2. Referencias	16**](#referencias)
-
-1. # Introducción {#introducción}
-
-   1. ## Contexto {#contexto}
+   ## 1.1.  Contexto 
 
    La gestión de residuos sólidos representa uno de los desafíos medioambientales más urgentes en las ciudades latinoamericanas. En Lima Metropolitana, según datos del MINAM (2022), solo el 1,9% de los residuos sólidos generados diariamente llegan a ser reciclados de forma correcta. Esta brecha no se explica únicamente por falta de infraestructura: estudios de comportamiento ambiental señalan que la ausencia de información clara sobre cómo y dónde reciclar, junto con la carencia de incentivos concretos, son los principales obstáculos para que los ciudadanos adopten hábitos de reciclaje sostenidos en el tiempo.
 
@@ -145,7 +35,7 @@ Desarrollo Basado en Plataformas (CS2031)
 
    
 
-   2. ## Objetivos del proyecto {#objetivos-del-proyecto}
+   ## 1.2.  Objetivos del proyecto 
 
 * Implementar un sistema de autenticación y autorización segura.  
 * Registrar reciclajes realizados por usuarios.  
@@ -160,9 +50,8 @@ Desarrollo Basado en Plataformas (CS2031)
 
 ---
 
-2. # Identificación del Problema o Necesidad {#identificación-del-problema-o-necesidad}
-
-   1. ## Descripción del Problema {#descripción-del-problema}
+# 2.  Identificación del Problema o Necesidad 
+   ## 2.1.  Descripción del Problema 
 
    Los ciudadanos de Lima y otras ciudades del Perú enfrentan cuatro barreras concretas que dificultan el reciclaje correcto: 
 
@@ -174,7 +63,7 @@ Desarrollo Basado en Plataformas (CS2031)
 * Falta de incentivos
 
 
-  2. ## Justificación {#justificación}
+  ## 2.2.  Justificación 
 
   Resolver este problema es relevante debido al impacto ambiental generado por la incorrecta disposición de residuos. La implementación de una plataforma inteligente permite:
 
@@ -191,12 +80,11 @@ Desarrollo Basado en Plataformas (CS2031)
 
 ---
 
-3. # Descripción de la Solución {#descripción-de-la-solución}
+# 3.  Descripción de la Solución 
 
-## Funcionalidades implementadas {#funcionalidades-implementadas}
+## Funcionalidades implementadas 
 
-1. ### Autenticación y Gestión de Usuarios {#autenticación-y-gestión-de-usuarios}
-
+### 3.1.  Autenticación y Gestión de Usuarios 
    Se implementó un sistema de registro e inicio de sesión basado en JWT (JSON Web Token) stateless. 
 
    
@@ -210,7 +98,7 @@ Desarrollo Basado en Plataformas (CS2031)
 
  
 
-2. ### Puntos de Mapa y Geolocalización {#puntos-de-mapa-y-geolocalización}
+### 3.2.  Puntos de Mapa y Geolocalización 
 
    La plataforma administra:
 
@@ -219,7 +107,7 @@ Desarrollo Basado en Plataformas (CS2031)
   La validación de geolocalización se realiza mediante servicios de ubicación otorgados por el usuario al momento de ingresar a la plataforma.
 
 
-  3. ### Registro de Reciclaje con Validación Multicapa {#registro-de-reciclaje-con-validación-multicapa}
+  ### 3.3.  Registro de Reciclaje con Validación Multicapa 
 
   El flujo de registro de reciclaje implementa tres fases secuenciales:
 
@@ -233,22 +121,22 @@ Desarrollo Basado en Plataformas (CS2031)
   **Fase C \- Cálculo de Puntos y Persistencia:** El peso estimado se calcula multiplicando el peso promedio del material por un coeficiente de tamaño (PEQUEÑO: ×0.5, MEDIANO: ×1.0, GRANDE: ×2.0) y por el número de artículos. Los puntos base son peso\_kg × puntos\_por\_kg. Si el GPS es válido, se aplica el bonus del 20%. Solo se otorgan puntos cuando la IA valida el material. La actualización de puntos del usuario usa @Version (locking optimista) para evitar inconsistencias en escenarios de alta concurrencia. Tras persistir el reporte, se publica un ReciclajeValidadoEvent que desencadena el procesamiento asíncrono de badges y desafíos.
 
 
-  4. ### Desafíos Diarios y Semanales {#desafíos-diarios-y-semanales}
+  ### 3.4.  Desafíos Diarios y Semanales 
 
   La entidad Desafio permite definir retos con categoría (DIARIO, SEMANAL, MENSUAL, ESPECIAL), meta numérica, unidad de medida, filtro opcional por tipo de material, puntos de recompensa y ventana temporal de vigencia. La tabla intermedia UsuarioDesafio registra el progreso individual de cada usuario en cada desafío al que se inscribió.
 
 
-  5. ### Sistema de Badges {#sistema-de-badges}
+  ### 3.5.  Sistema de Badges 
 
   Los badges representan logros desbloqueables que el sistema evalúa automáticamente tras cada reciclaje validado. Existen cinco tipos: por puntos acumulados, por número total de reciclajes, por racha de días, por kilogramos reciclados de un material específico y por participación en eventos. La evaluación se realiza de forma asíncrona en el BadgeService, que escucha el mismo ReciclajeValidadoEvent. Un usuario puede tener múltiples badges (relación @ManyToMany con User). 
 
 
-  6. ### Ranking Público por Distrito {#ranking-público-por-distrito}
+  ### 3.6.  Ranking Público por Distrito 
 
   El RankingService expone dos endpoints: ranking global (top 100 usuarios por puntos) y ranking filtrado por distrito. Cada entrada del ranking incluye posición, username, puntos, nivel, distrito y número de badges. Adicionalmente, una tarea programada con @Scheduled recalcula y loguea el ranking cada hora, preparando la infraestructura para una futura integración con caché distribuido. 
 
 
-  7. ### Historial de Reciclajes {#historial-de-reciclajes}
+  ### 3.7.  Historial de Reciclajes 
 
   Cada usuario puede consultar:
 
@@ -257,7 +145,7 @@ Desarrollo Basado en Plataformas (CS2031)
 * Materiales reciclados.  
 * Fecha y validaciones.
 
-## Tecnologías utilizadas {#tecnologías-utilizadas}
+## Tecnologías utilizadas
 
 | Capa | Tecnología | Justificación |
 | :---: | :---: | :---: |
@@ -274,199 +162,137 @@ Desarrollo Basado en Plataformas (CS2031)
 
 ---
 
-4. # Modelo de Entidades {#modelo-de-entidades}
+# 4.  Modelo de Entidades
 
-   1. ## Entidades Principales {#entidades-principales}
+   ## 4.1.  Entidades Principales 
 
-      1. ### Usuario {#usuario}
+      Usuario 
 
       Entidad central del sistema. Implementa UserDetails de Spring Security para integrarse directamente con el filtro JWT. Representa a cada usuario registrado:
 
       Usuario() {
-
       id,
-
       email,
-
       password,
-
       name,
-
       username,
-
       points,
-
       multiplier,
-
       profile\_picture,
-
       location,
-
       reciclajes,
-
       nivel,
-
       racha\_dias,
-
       fecha\_registro,
-
       ultimo\_login
-
       }
 
-      2. ### Materiales {#materiales}
+      Materiales 
 
       Catálogo de materiales reciclables. La restricción nombre UNIQUE evita duplicados en la base de datos. Representa materiales reciclables
 
       Materiales() {
-
       id,
-
       nombre,
-
       categoria,
-
       puntos,
-
       peso,
-
       reciclable
-
       }
 
-      3. ### ReporteReciclaje {#reportereciclaje}
+      ReporteReciclaje 
 
       Entidad de evento inmutable que captura el estado completo del reciclaje en el momento en que ocurrió. Entidad principal del sistema
 
       ReporteReciclaje() {
-
       numero\_reporte,
-
       U.id,
-
       M.id,
-
       P.id,
-
       foto\_url,
-
       tamaño\_objeto,
-
       M.peso,
-
       M.nombre,
-
       P.latitud,
-
       P.longitud,
-
       material\_detectado\_ia,
-
       confianza\_ia,
-
       validado\_ia,
-
       gps\_validado,
-
       R.puntos,
-
       fecha,
-
       numero\_articulos
-
       }
 
-      4. ### PuntoMapa {#puntomapa}
+      PuntoMapa 
 
       Representa zonas sucias reportadas por usuarios (estado PENDIENTE hasta alcanzar 20 votos o aprobación manual). 
 
       PuntoMapa() {
-
       latitud,
-
       longitud,
-
       radio\_validacion
-
       }
 
-      5. ### Desafio {#desafio}
+      Desafio 
 
       Diseño de tabla que permite rastrear el progreso individual. 
 
       Desafio() {
-
       	id,
-
       titulo,
-
       descripcion,
-
       categoria,
-
       meta\_valor,
-
       puntos,
-
       fecha\_inicio,
-
       fecha\_fin,
-
       activo
-
       }
 
-      6. ### ReporteZona {#reportezona}
+      ReporteZona 
 
       ReporteZona() {
-
       id,
-
       fecha,
-
       procesado,
-
       longitud,
-
       latitud,
-
       descripcion
-
       }
 
-      7. ### Ranking {#ranking}
+      Ranking
 
       Ranking() {
-
       posicion
-
       }
 
-   2. ## Diagrama Entidad-Relación {#diagrama-entidad-relación}
+   ## 4.2.  Diagrama Entidad-Relación 
 
-   ![][image2]
+   ![Diagrama](modeloER.jpeg)
 
-5. # Testing y Manejo de Errores {#testing-y-manejo-de-errores}
+# 5.  Testing y Manejo de Errores 
 
-   1. ## Niveles de Testing Realizados {#niveles-de-testing-realizados}
+   ## 5.1.  Niveles de Testing Realizados 
 
-      1. Testing Unitario
+1. Testing Unitario
 
       Se validaron:
 
 - Servicios.  
 - Cálculo de puntos.  
 - Validaciones de negocio  
-  2. Testing de Integración
 
-     Se probaron:
+2. Testing de Integración
+
+   Se probaron:
 
 - Endpoints REST  
 - Persistencia en la base de datos  
 - Seguridad JWT  
-  3. Testing funcional
+3. Testing funcional
 
-     Flujo completo probado:
+   Flujo completo probado:
 
 - Registro  
 - Login  
@@ -475,7 +301,7 @@ Desarrollo Basado en Plataformas (CS2031)
 - Asignación de puntos.
 
 
-  2. ## Resultados {#resultados}
+  ## 5.2.  Resultados 
 
   Errores corregidos:
 
@@ -486,7 +312,7 @@ Desarrollo Basado en Plataformas (CS2031)
 | Coordenadas incorrectas | Validaciones GPS |
 | Categorías inválidas | Enum TipoMaterial |
 
-  3. ## Manejo de Errores {#manejo-de-errores}
+  ## 5.3.  Manejo de Errores 
 
   Se implementó un GlobalExceptionHandler.
 
@@ -501,35 +327,35 @@ Desarrollo Basado en Plataformas (CS2031)
 
 ---
 
-6. # Medidas de Seguridad Implementadas {#medidas-de-seguridad-implementadas}
+# 6.  Medidas de Seguridad Implementadas 
 
-   1. ## Seguridad de Datos {#seguridad-de-datos}
+   ## 6.1.  Seguridad de Datos 
 
-      1. ### Autenticación JWT {#autenticación-jwt}
+### 6.1.1.  Autenticación JWT 
 
-      Cada usuario autenticado recibe un token.
+Cada usuario autenticado recibe un token.
 
-      Authorization: Bearer TOKEN
+Authorization: Bearer TOKEN
 
-      2. ### Cifrado de Contraseñas {#cifrado-de-contraseñas}
+### 6.1.2. Cifrado de Contraseñas 
 
-      Se utiliza:
+Se utiliza:
 
-      BCryptPasswordEncoder
+BCryptPasswordEncoder
 
-      Las contraseñas nunca se almacenan en texto plano.
-
-      
-
-      3. Protección de Endpoints
-
-      Spring Security restringe acceso:
-
-      .anyRequest().authenticated()
+Las contraseñas nunca se almacenan en texto plano.
 
       
 
-   2. ## Prevención de Vulnerabilidades {#prevención-de-vulnerabilidades}
+### 6.1.3. Protección de Endpoints
+
+Spring Security restringe acceso:
+
+.anyRequest().authenticated()
+
+      
+
+   ## 6.2.  Prevención de Vulnerabilidades 
 
 | Vulnerabilidad | Prevención |
 | ----- | ----- |
@@ -541,29 +367,28 @@ Desarrollo Basado en Plataformas (CS2031)
 
 ---
 
-7. # Eventos y Asincronía {#eventos-y-asincronía}
+# 7.  Eventos y Asincronía 
 
-   1. ## Eventos Utilizados {#eventos-utilizados}
+   ## 7.1.  Eventos Utilizados 
 
-      1. ## Validación de Imágenes {#validación-de-imágenes}
+### 7.1.1.  Validación de Imágenes 
 
-      El reconocimiento mediante IA es una operación costosa.
+El reconocimiento mediante IA es una operación costosa.
 
-      Se ejecuta de forma asincrónica para:
+Se ejecuta de forma asincrónica para:
 
 * Evitar bloquear peticiones.  
 * Mejorar rendimiento.  
 * Escalar el sistema.
 
-  2. ### Validación GPS {#validación-gps}
-
+### 7.1.2.  Validación GPS 
   La verificación geográfica puede ejecutarse como proceso independiente.
 
-     3. ### Cálculo de Rankings {#cálculo-de-rankings}
+### 7.1.3. Cálculo de Rankings
 
   El ranking general puede recalcularse mediante eventos programados.
 
-  2. ## Importancia de la Asincronía {#importancia-de-la-asincronía}
+  ## 7.2.  Importancia de la Asincronía 
 
   Beneficios:
 
@@ -572,7 +397,7 @@ Desarrollo Basado en Plataformas (CS2031)
 - Mayor escalabilidad.  
 - Procesamiento paralelo.
 
-  3. ## Flujo Asincrónico {#flujo-asincrónico}
+  ## 7.3.  Flujo Asincrónico 
 
      Usuario sube imagen  
      ↓  
@@ -586,9 +411,9 @@ Desarrollo Basado en Plataformas (CS2031)
 
 ---
 
-8. # GitHub & Management {#github-&-management}
+# 8.  GitHub & Management
 
-   1. # GitHub Projects {#github-projects}
+   ## 8.1.  GitHub Projects 
 
    El equipo utilizó GitHub Projects para:
 
@@ -598,7 +423,7 @@ Desarrollo Basado en Plataformas (CS2031)
 * Gestión de deadlines.
 
 
-  2. ## Organización del Trabajo {#organización-del-trabajo}
+  ## 8.2.  Organización del Trabajo 
 
 | Integrante | Responsabilidad |
 | :---- | :---- |
@@ -607,8 +432,7 @@ Desarrollo Basado en Plataformas (CS2031)
 | Luis | PuntosMapa |
 | Joseph | Materiales |
 
-  3. ## GitHub Actions {#github-actions}
-
+  ## 8.3.  GitHub Actions 
   Se implementó integración continua para:
 
 * Build automático.  
@@ -637,9 +461,9 @@ Desarrollo Basado en Plataformas (CS2031)
 
 ---
 
-9. # Conclusión {#conclusión}
+# 9.  Conclusión
 
-   1. # Logros del Proyecto {#logros-del-proyecto}
+   ## 9.1.  Logros del Proyecto 
 
    El proyecto logró implementar exitosamente:
 
@@ -649,7 +473,7 @@ Desarrollo Basado en Plataformas (CS2031)
 * Arquitectura backend escalable.
 
 
-  2. ## Aprendizajes Clave {#aprendizajes-clave}
+  ## 9.2.  Aprendizajes Clave 
 
   Durante el desarrollo se aprendió:
 
@@ -660,8 +484,7 @@ Desarrollo Basado en Plataformas (CS2031)
 * Integración con APIs externas.  
 * Diseño modular backend.
 
-  3. ## Trabajo Futuro {#trabajo-futuro}
-
+  ## 9.3.  Trabajo Futuro 
   Posibles mejoras:
 
 * Ranking global en tiempo real.  
@@ -672,13 +495,13 @@ Desarrollo Basado en Plataformas (CS2031)
 
 ---
 
-10. # Apéndices {#apéndices}
+# 10.  Apéndices 
 
-    1. # Licencia {#licencia}
+## 10.1.  Licencia
 
-    Este proyecto se distribuye bajo licencia MIT.
+Este proyecto se distribuye bajo licencia MIT.
 
-    2. # Referencias {#referencias}
+## 10.2.  Referencias 
 
     Spring Framework Documentation (2024). Spring Boot Reference Documentation 
 
