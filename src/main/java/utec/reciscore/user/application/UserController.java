@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import utec.reciscore.user.dto.UserRequestDTO;
 import utec.reciscore.user.dto.UserResponseDTO;
 import utec.reciscore.user.dto.UserUpdateDTO;
+import utec.reciscore.user.model.User;
 import utec.reciscore.user.model.UserService;
+
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/users")
@@ -31,4 +34,12 @@ public class UserController {
                                                   @RequestBody UserUpdateDTO dto) {
         return ResponseEntity.ok(userService.update(id, dto));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }
