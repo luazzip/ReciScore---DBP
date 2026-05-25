@@ -24,22 +24,12 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(
-        value = UserController.class,
-        excludeAutoConfiguration = UserDetailsServiceAutoConfiguration.class
-)
+@WebMvcTest(value = UserController.class, excludeAutoConfiguration = UserDetailsServiceAutoConfiguration.class)
 class UserControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @MockitoBean
-    private UserService userService;
-    @MockitoBean
-    private utec.reciscore.auth.JwtService jwtService;
+    @Autowired private MockMvc mockMvc;
+    @Autowired private ObjectMapper objectMapper;
+    @MockitoBean private UserService userService;
+    @MockitoBean private utec.reciscore.auth.JwtService jwtService;
 
     private UserResponseDTO userResponse;
 
@@ -55,7 +45,7 @@ class UserControllerTest {
 
     @Test
     @WithMockUser
-    void getById_retorna200() throws Exception {
+    void shouldReturn200WithUserWhenIdExists() throws Exception {
         when(userService.getById(1L)).thenReturn(userResponse);
 
         mockMvc.perform(get("/users/1"))
@@ -66,9 +56,8 @@ class UserControllerTest {
 
     @Test
     @WithMockUser
-    void getById_noExiste_retorna404() throws Exception {
-        when(userService.getById(99L))
-                .thenThrow(new NoSuchElementException("Usuario no encontrado"));
+    void shouldReturn404WhenUserIdDoesNotExist() throws Exception {
+        when(userService.getById(99L)).thenThrow(new NoSuchElementException("No encontrado"));
 
         mockMvc.perform(get("/users/99"))
                 .andExpect(status().isNotFound());
@@ -76,15 +65,14 @@ class UserControllerTest {
 
     @Test
     @WithMockUser
-    void update_retorna200() throws Exception {
+    void shouldReturn200WithUpdatedDataWhenUpdateIsSuccessful() throws Exception {
         UserUpdateDTO dto = new UserUpdateDTO();
         dto.setLocation("Miraflores");
-
         userResponse.setLocation("Miraflores");
+
         when(userService.update(eq(1L), any())).thenReturn(userResponse);
 
-        mockMvc.perform(patch("/users/1")
-                        .with(csrf())
+        mockMvc.perform(patch("/users/1").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())

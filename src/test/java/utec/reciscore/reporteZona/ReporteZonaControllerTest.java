@@ -64,7 +64,7 @@ class ReporteZonaControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    void create_requestValido_retorna200ConBody() throws Exception {
+    void shouldReturn200WithBodyWhenRequestIsValid() throws Exception {
         when(reporteZonaService.create(any())).thenReturn(responseDTO);
 
         mockMvc.perform(post("/reportes-zona")
@@ -81,7 +81,7 @@ class ReporteZonaControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    void create_descripcionOpcional_retorna200() throws Exception {
+    void shouldReturn200WhenDescripcionIsOptional() throws Exception {
         requestDTO.setDescripcion(null);
         responseDTO.setDescripcion(null);
         when(reporteZonaService.create(any())).thenReturn(responseDTO);
@@ -96,7 +96,7 @@ class ReporteZonaControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    void create_zonaYaReportada_retorna409() throws Exception {
+    void shouldReturn409WhenZoneAlreadyReported() throws Exception {
         when(reporteZonaService.create(any()))
                 .thenThrow(new DuplicateReportException("Ya reportaste esta zona"));
 
@@ -108,7 +108,7 @@ class ReporteZonaControllerTest {
     }
 
     @Test
-    void create_sinAutenticacion_retorna401() throws Exception {
+    void shouldReturn401WhenNotAuthenticated() throws Exception {
         mockMvc.perform(post("/reportes-zona")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -118,7 +118,7 @@ class ReporteZonaControllerTest {
 
     @Test
     @WithMockUser
-    void getAll_retorna200ConLista() throws Exception {
+    void shouldReturn200WithListWhenReportesExist() throws Exception {
         when(reporteZonaService.getAll()).thenReturn(List.of(responseDTO));
 
         mockMvc.perform(get("/reportes-zona"))
@@ -133,7 +133,7 @@ class ReporteZonaControllerTest {
 
     @Test
     @WithMockUser
-    void getAll_listaVacia_retorna200ConArrayVacio() throws Exception {
+    void shouldReturn200WithEmptyArrayWhenNoReportesExist() throws Exception {
         when(reporteZonaService.getAll()).thenReturn(List.of());
 
         mockMvc.perform(get("/reportes-zona"))
@@ -144,7 +144,7 @@ class ReporteZonaControllerTest {
 
     @Test
     @WithMockUser
-    void getAll_variosReportes_retornaTodos() throws Exception {
+    void shouldReturnAllReportesWhenMultipleExist() throws Exception {
         ReporteZonaResponseDTO response2 = new ReporteZonaResponseDTO();
         response2.setId(2L);
         response2.setLatitude(-11.0);
@@ -163,13 +163,13 @@ class ReporteZonaControllerTest {
     }
 
     @Test
-    void getAll_sinAutenticacion_retorna401() throws Exception {
+    void shouldReturn401OnGetAllWhenNotAuthenticated() throws Exception {
         mockMvc.perform(get("/reportes-zona"));
     }
 
     @Test
     @WithMockUser
-    void getAll_reporteProcesado_apareceEnRespuesta() throws Exception {
+    void shouldIncludeProcessedReporteInResponse() throws Exception {
         responseDTO.setProcesado(true);
         when(reporteZonaService.getAll()).thenReturn(List.of(responseDTO));
 

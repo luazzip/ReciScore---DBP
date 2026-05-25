@@ -63,7 +63,7 @@ class PuntoMapaControllerTest {
 
     @Test
     @WithMockUser
-    void crear_retorna200() throws Exception {
+    void shouldReturn200WhenPuntoMapaIsCreated() throws Exception {
         when(puntoMapaService.crear(any())).thenReturn(responseDTO);
 
         mockMvc.perform(post("/puntos-mapa")
@@ -76,7 +76,7 @@ class PuntoMapaControllerTest {
 
     @Test
     @WithMockUser
-    void listar_retorna200() throws Exception {
+    void shouldReturn200WithListWhenGetAllIsCalled() throws Exception {
         when(puntoMapaService.obtenerTodos()).thenReturn(List.of(responseDTO));
 
         mockMvc.perform(get("/puntos-mapa"))
@@ -86,7 +86,7 @@ class PuntoMapaControllerTest {
 
     @Test
     @WithMockUser
-    void buscarPorId_retorna200() throws Exception {
+    void shouldReturn200WhenPuntoMapaIdExists() throws Exception {
         when(puntoMapaService.buscarPorId(1L)).thenReturn(responseDTO);
 
         mockMvc.perform(get("/puntos-mapa/1"))
@@ -96,14 +96,14 @@ class PuntoMapaControllerTest {
 
     @Test
     @WithMockUser
-    void eliminar_retorna204() throws Exception {
+    void shouldReturn204WhenPuntoMapaIsDeleted() throws Exception {
         mockMvc.perform(delete("/puntos-mapa/1").with(csrf()))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     @WithMockUser
-    void validarUbicacion_retorna200() throws Exception {
+    void shouldReturn200WithTrueWhenLocationIsValid() throws Exception {
         when(puntoMapaService.estaEnZonaValida(-12.1191, -77.0308)).thenReturn(true);
 
         mockMvc.perform(get("/puntos-mapa/validar")

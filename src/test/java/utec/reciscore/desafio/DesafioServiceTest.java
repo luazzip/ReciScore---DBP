@@ -72,7 +72,7 @@ class DesafioServiceTest {
     }
 
     @Test
-    void createDesafio_exitoso() {
+    void shouldCreateDesafioWhenCategoryIsUnique() {
         // Arrange
         when(desafioRepository.existsByCategoria(anyString())).thenReturn(false);
         when(modelMapper.map(any(), eq(Desafio.class))).thenReturn(desafio);
@@ -87,7 +87,7 @@ class DesafioServiceTest {
     }
 
     @Test
-    void createDesafio_categoriaDuplicada_lanzaExcepcion() {
+    void shouldThrowExceptionWhenCategoryAlreadyExists() {
         when(desafioRepository.existsByCategoria(anyString())).thenReturn(true);
 
         assertThrows(IllegalArgumentException.class,
@@ -97,7 +97,7 @@ class DesafioServiceTest {
     }
 
     @Test
-    void createDesafio_fechaFinAntesFechaInicio_lanzaExcepcion() {
+    void shouldThrowExceptionWhenEndDateIsBeforeStartDate() {
 
         createRequest.setFecha_fin(LocalDateTime.now().minusDays(1));
         when(desafioRepository.existsByCategoria(anyString())).thenReturn(false);
@@ -110,7 +110,7 @@ class DesafioServiceTest {
     }
 
     @Test
-    void findById_exitoso() {
+    void shouldReturnDesafioWhenIdExists() {
 
         when(desafioRepository.findById(1L)).thenReturn(Optional.of(desafio));
         when(modelMapper.map(any(), eq(DetailDesafioResponse.class)))
@@ -122,7 +122,7 @@ class DesafioServiceTest {
     }
 
     @Test
-    void findById_noExiste_lanzaExcepcion() {
+    void shouldThrowExceptionWhenDesafioIdDoesNotExist() {
 
         when(desafioRepository.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -132,7 +132,7 @@ class DesafioServiceTest {
     }
 
     @Test
-    void unirse_exitoso() {
+    void shouldAddUserToDesafioWhenNotAlreadyEnrolled() {
 
         when(desafioRepository.findById(1L)).thenReturn(Optional.of(desafio));
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
@@ -150,7 +150,7 @@ class DesafioServiceTest {
     }
 
     @Test
-    void unirse_usuarioYaInscrito_lanzaExcepcion() {
+    void shouldThrowExceptionWhenUserIsAlreadyEnrolled() {
         desafio.getUsuariosInscritos().add(user);
         when(desafioRepository.findById(1L)).thenReturn(Optional.of(desafio));
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
@@ -162,7 +162,7 @@ class DesafioServiceTest {
     }
 
     @Test
-    void updateDesafio_exitoso() {
+    void shouldUpdateDesafioWhenExists() {
 
         UpdateDesafioRequest updateRequest = new UpdateDesafioRequest();
         updateRequest.setTitulo("Nuevo titulo");
@@ -181,8 +181,7 @@ class DesafioServiceTest {
     }
 
     @Test
-    void updateDesafio_noExiste_lanzaExcepcion() {
-
+    void shouldThrowExceptionWhenUpdatingNonExistentDesafio() {
         when(desafioRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class,

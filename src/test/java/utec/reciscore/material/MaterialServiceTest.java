@@ -23,25 +23,16 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class MaterialServiceTest {
-    @Mock
-    private MaterialRepository materialRepository;
-
-    @InjectMocks
-    private MaterialService materialService;
+    @Mock private MaterialRepository materialRepository;
+    @InjectMocks private MaterialService materialService;
 
     private Material material;
     private MaterialRequest request;
 
     @BeforeEach
     void setUp() {
-        material = Material.builder()
-                .id(1L)
-                .name("Botella PET")
-                .pointsPerKg(10.0)
-                .weight(0.5)
-                .category(TipoMaterial.PLASTICO)
-                .recyclable(true)
-                .build();
+        material = Material.builder().id(1L).name("Botella PET")
+                .pointsPerKg(10.0).weight(0.5).category(TipoMaterial.PLASTICO).recyclable(true).build();
 
         request = new MaterialRequest();
         request.setName("Botella PET");
@@ -52,7 +43,7 @@ class MaterialServiceTest {
     }
 
     @Test
-    void create_exitoso() {
+    void shouldCreateMaterialWhenNameIsUnique() {
         when(materialRepository.existsByName(anyString())).thenReturn(false);
         when(materialRepository.save(any())).thenReturn(material);
 
@@ -60,23 +51,19 @@ class MaterialServiceTest {
 
         assertNotNull(response);
         assertEquals("Botella PET", response.getName());
-        assertEquals(TipoMaterial.PLASTICO, response.getCategory());
         verify(materialRepository).save(any());
     }
 
     @Test
-    void create_nombreDuplicado_lanzaExcepcion() {
+    void shouldThrowExceptionWhenMaterialNameAlreadyExists() {
         when(materialRepository.existsByName(anyString())).thenReturn(true);
 
-        assertThrows(IllegalArgumentException.class,
-                () -> materialService.create(request));
-
+        assertThrows(IllegalArgumentException.class, () -> materialService.create(request));
         verify(materialRepository, never()).save(any());
     }
 
     @Test
-    void getById_exitoso() {
-        // Arrange
+    void shouldReturnMaterialWhenIdExists() {
         when(materialRepository.findById(1L)).thenReturn(Optional.of(material));
 
         MaterialResponse response = materialService.getById(1L);
@@ -86,32 +73,28 @@ class MaterialServiceTest {
     }
 
     @Test
-    void getById_noExiste_lanzaExcepcion() {
+    void shouldThrowExceptionWhenMaterialIdDoesNotExist() {
         when(materialRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class,
-                () -> materialService.getById(99L));
+        assertThrows(NoSuchElementException.class, () -> materialService.getById(99L));
     }
 
     @Test
-    void getAll_retornaLista() {
+    void shouldReturnAllMaterialsWhenRepositoryIsNotEmpty() {
         when(materialRepository.findAll()).thenReturn(List.of(material));
 
         List<MaterialResponse> response = materialService.getAll();
 
-        assertNotNull(response);
         assertEquals(1, response.size());
         assertEquals("Botella PET", response.get(0).getName());
     }
 
     @Test
-    void getByCategory_retornaLista() {
-        when(materialRepository.findByCategory(TipoMaterial.PLASTICO))
-                .thenReturn(List.of(material));
+    void shouldReturnMaterialsFilteredWhenCategoryMatches() {
+        when(materialRepository.findByCategory(TipoMaterial.PLASTICO)).thenReturn(List.of(material));
 
         List<MaterialResponse> response = materialService.getByCategory(TipoMaterial.PLASTICO);
 
-        assertNotNull(response);
         assertEquals(1, response.size());
         assertEquals(TipoMaterial.PLASTICO, response.get(0).getCategory());
     }

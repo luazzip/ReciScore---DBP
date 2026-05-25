@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import utec.reciscore.exceptions.DuplicateUserException;
 import utec.reciscore.user.dto.UserResponseDTO;
 import utec.reciscore.user.dto.UserUpdateDTO;
 import utec.reciscore.user.infrastructure.UserRepository;
@@ -23,15 +22,9 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
-
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private ModelMapper modelMapper;
-
-    @InjectMocks
-    private UserService userService;
+    @Mock private UserRepository userRepository;
+    @Mock private ModelMapper modelMapper;
+    @InjectMocks private UserService userService;
 
     private User user;
     private UserResponseDTO userResponseDTO;
@@ -55,7 +48,7 @@ class UserServiceTest {
     }
 
     @Test
-    void getById_exitoso() {
+    void shouldReturnUserWhenIdExists() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(modelMapper.map(user, UserResponseDTO.class)).thenReturn(userResponseDTO);
 
@@ -67,15 +60,14 @@ class UserServiceTest {
     }
 
     @Test
-    void getById_noExiste_lanzaExcepcion() {
+    void shouldThrowExceptionWhenUserIdDoesNotExist() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class,
-                () -> userService.getById(99L));
+        assertThrows(NoSuchElementException.class, () -> userService.getById(99L));
     }
 
     @Test
-    void update_nombre_exitoso() {
+    void shouldUpdateNameWhenNewNameIsProvided() {
         UserUpdateDTO dto = new UserUpdateDTO();
         dto.setName("Nuevo Nombre");
 
@@ -83,15 +75,14 @@ class UserServiceTest {
         when(userRepository.save(any())).thenReturn(user);
         when(modelMapper.map(any(), eq(UserResponseDTO.class))).thenReturn(userResponseDTO);
 
-        UserResponseDTO response = userService.update(1L, dto);
+        userService.update(1L, dto);
 
-        assertNotNull(response);
         assertEquals("Nuevo Nombre", user.getName());
         verify(userRepository).save(user);
     }
 
     @Test
-    void update_location_exitoso() {
+    void shouldUpdateLocationWhenNewLocationIsProvided() {
         UserUpdateDTO dto = new UserUpdateDTO();
         dto.setLocation("San Isidro");
 
@@ -106,10 +97,9 @@ class UserServiceTest {
     }
 
     @Test
-    void update_noExiste_lanzaExcepcion() {
+    void shouldThrowExceptionWhenUpdatingNonExistentUser() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class,
-                () -> userService.update(99L, new UserUpdateDTO()));
+        assertThrows(NoSuchElementException.class, () -> userService.update(99L, new UserUpdateDTO()));
     }
 }

@@ -10,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import utec.reciscore.desafio.application.DesafioController;
 import utec.reciscore.material.application.MaterialController;
 import utec.reciscore.material.dto.MaterialRequest;
 import utec.reciscore.material.dto.MaterialResponse;
@@ -26,31 +25,20 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(
-        value = MaterialController.class,
-        excludeAutoConfiguration = UserDetailsServiceAutoConfiguration.class
-)
+@WebMvcTest(value = MaterialController.class, excludeAutoConfiguration = UserDetailsServiceAutoConfiguration.class)
 class MaterialControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-    @MockitoBean
-    private MaterialService materialService;
-    @MockitoBean
-    private utec.reciscore.auth.JwtService jwtService;
-    @MockitoBean
-    private org.springframework.security.core.userdetails.UserDetailsService userDetailsService;
-
+    @Autowired private MockMvc mockMvc;
+    @Autowired private ObjectMapper objectMapper;
+    @MockitoBean private MaterialService materialService;
+    @MockitoBean private utec.reciscore.auth.JwtService jwtService;
+    @MockitoBean private org.springframework.security.core.userdetails.UserDetailsService userDetailsService;
 
     private MaterialResponse materialResponse;
     private MaterialRequest materialRequest;
 
     @BeforeEach
     void setUp() {
-        materialResponse = new MaterialResponse(1L, "Botella PET", 10.0, 0.5,
-                TipoMaterial.PLASTICO, true);
-
+        materialResponse = new MaterialResponse(1L, "Botella PET", 10.0, 0.5, TipoMaterial.PLASTICO, true);
         materialRequest = new MaterialRequest();
         materialRequest.setName("Botella PET");
         materialRequest.setPointsPerKg(10.0);
@@ -61,11 +49,10 @@ class MaterialControllerTest {
 
     @Test
     @WithMockUser
-    void create_retorna201() throws Exception {
+    void shouldReturn201WhenMaterialIsCreatedSuccessfully() throws Exception {
         when(materialService.create(any())).thenReturn(materialResponse);
 
-        mockMvc.perform(post("/material")
-                        .with(csrf())
+        mockMvc.perform(post("/material").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(materialRequest)))
                 .andExpect(status().isCreated())
@@ -74,7 +61,7 @@ class MaterialControllerTest {
 
     @Test
     @WithMockUser
-    void getAll_retorna200() throws Exception {
+    void shouldReturn200WithListWhenGetAllIsCalled() throws Exception {
         when(materialService.getAll()).thenReturn(List.of(materialResponse));
 
         mockMvc.perform(get("/material"))
@@ -84,7 +71,7 @@ class MaterialControllerTest {
 
     @Test
     @WithMockUser
-    void getById_retorna200() throws Exception {
+    void shouldReturn200WithMaterialWhenIdExists() throws Exception {
         when(materialService.getById(1L)).thenReturn(materialResponse);
 
         mockMvc.perform(get("/material/1"))
@@ -94,9 +81,8 @@ class MaterialControllerTest {
 
     @Test
     @WithMockUser
-    void getById_noExiste_retorna404() throws Exception {
-        when(materialService.getById(99L))
-                .thenThrow(new NoSuchElementException("No encontrado"));
+    void shouldReturn404WhenMaterialIdDoesNotExist() throws Exception {
+        when(materialService.getById(99L)).thenThrow(new NoSuchElementException("No encontrado"));
 
         mockMvc.perform(get("/material/99"))
                 .andExpect(status().isNotFound());
@@ -104,9 +90,8 @@ class MaterialControllerTest {
 
     @Test
     @WithMockUser
-    void getByCategory_retorna200() throws Exception {
-        when(materialService.getByCategory(TipoMaterial.PLASTICO))
-                .thenReturn(List.of(materialResponse));
+    void shouldReturn200WithFilteredListWhenCategoryMatches() throws Exception {
+        when(materialService.getByCategory(TipoMaterial.PLASTICO)).thenReturn(List.of(materialResponse));
 
         mockMvc.perform(get("/material/category/PLASTICO"))
                 .andExpect(status().isOk())

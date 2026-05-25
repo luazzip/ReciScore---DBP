@@ -66,7 +66,7 @@ class DesafioControllerTest {
 
     @Test
     @WithMockUser
-    void createDesafio_retorna201() throws Exception {
+    void shouldReturn201WhenDesafioIsCreated() throws Exception {
         when(desafioService.createDesafio(any())).thenReturn(detailResponse);
 
         mockMvc.perform(post("/desafios")
@@ -79,7 +79,7 @@ class DesafioControllerTest {
 
     @Test
     @WithMockUser
-    void getAllDesafios_retorna200() throws Exception {
+    void shouldReturn200WithListWhenGetAllIsCalled() throws Exception {
         ListDesafioResponse listResponse = new ListDesafioResponse();
         listResponse.setId(1L);
         listResponse.setTitulo("Recicla 3 botellas");
@@ -92,7 +92,7 @@ class DesafioControllerTest {
 
     @Test
     @WithMockUser
-    void getDesafioById_retorna200() throws Exception {
+    void shouldReturn200WhenDesafioIdExists() throws Exception {
         when(desafioService.findById(1L)).thenReturn(detailResponse);
 
         mockMvc.perform(get("/desafios/1"))
@@ -102,7 +102,7 @@ class DesafioControllerTest {
 
     @Test
     @WithMockUser
-    void getDesafioById_noExiste_retorna404() throws Exception {
+    void getDesafioById_noshouldReturn404WhenDesafioIdDoesNotExistExiste_retorna404() throws Exception {
         when(desafioService.findById(99L))
                 .thenThrow(new NoSuchElementException("No encontrado"));
 
@@ -112,7 +112,7 @@ class DesafioControllerTest {
 
     @Test
     @WithMockUser
-    void unirse_retorna201() throws Exception {
+    void shouldReturn201WhenUserJoinsDesafio() throws Exception {
         when(desafioService.unirse(1L, 1L)).thenReturn(detailResponse);
 
         mockMvc.perform(post("/desafios/1/unirse")

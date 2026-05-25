@@ -62,7 +62,7 @@ class PuntoMapaServiceTest {
     }
 
     @Test
-    void crear_exitoso() {
+    void shouldCreatePuntoMapaWhenRequestIsValid() {
         when(puntoMapaRepository.save(any())).thenReturn(puntoMapa);
 
         PuntoMapaResponseDTO response = puntoMapaService.crear(requestDTO);
@@ -74,7 +74,7 @@ class PuntoMapaServiceTest {
     }
 
     @Test
-    void obtenerTodos_retornaLista() {
+    void shouldReturnListWhenPuntosMapaExist() {
         when(puntoMapaRepository.findAll()).thenReturn(List.of(puntoMapa));
 
         List<PuntoMapaResponseDTO> response = puntoMapaService.obtenerTodos();
@@ -84,7 +84,7 @@ class PuntoMapaServiceTest {
     }
 
     @Test
-    void obtenerTodos_listaVacia_lanzaExcepcion() {
+    void shouldThrowExceptionWhenNoPuntosMapaExist() {
         when(puntoMapaRepository.findAll()).thenReturn(List.of());
 
         assertThrows(NoSuchElementException.class,
@@ -92,7 +92,7 @@ class PuntoMapaServiceTest {
     }
 
     @Test
-    void buscarPorId_exitoso() {
+    void shouldReturnPuntoMapaWhenIdExists() {
         when(puntoMapaRepository.findById(1L)).thenReturn(Optional.of(puntoMapa));
         when(modelMapper.map(puntoMapa, PuntoMapaResponseDTO.class)).thenReturn(responseDTO);
 
@@ -103,7 +103,7 @@ class PuntoMapaServiceTest {
     }
 
     @Test
-    void buscarPorId_noExiste_lanzaExcepcion() {
+    void shouldThrowExceptionWhenPuntoMapaIdDoesNotExist() {
         when(puntoMapaRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class,
@@ -111,7 +111,7 @@ class PuntoMapaServiceTest {
     }
 
     @Test
-    void estaEnZonaValida_hayPuntosCercanos_retornaTrue() {
+    void shouldReturnTrueWhenNearbyPointsExist() {
         when(puntoMapaRepository.findPuntosEnRadio(anyDouble(), anyDouble(), anyDouble()))
                 .thenReturn(List.of(puntoMapa));
 
@@ -121,7 +121,7 @@ class PuntoMapaServiceTest {
     }
 
     @Test
-    void estaEnZonaValida_noPuntosCercanos_retornaFalse() {
+    void shouldReturnFalseWhenNoNearbyPointsExist() {
         when(puntoMapaRepository.findPuntosEnRadio(anyDouble(), anyDouble(), anyDouble()))
                 .thenReturn(List.of());
 

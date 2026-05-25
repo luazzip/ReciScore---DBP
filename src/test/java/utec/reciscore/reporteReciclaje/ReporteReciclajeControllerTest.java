@@ -72,7 +72,7 @@ class ReporteReciclajeControllerTest {
 
     @Test
     @WithMockUser
-    void crear_retorna200() throws Exception {
+    void shouldReturn200WhenReporteIsCreated() throws Exception {
         when(reporteService.crear(any())).thenReturn(responseDTO);
 
         mockMvc.perform(post("/reportes-reciclaje")
@@ -85,7 +85,7 @@ class ReporteReciclajeControllerTest {
 
     @Test
     @WithMockUser
-    void listarTodos_retorna200() throws Exception {
+    void shouldReturn200WithAllReportes() throws Exception {
         when(reporteService.obtenerTodos()).thenReturn(List.of(responseDTO));
 
         mockMvc.perform(get("/reportes-reciclaje"))
@@ -95,7 +95,7 @@ class ReporteReciclajeControllerTest {
 
     @Test
     @WithMockUser
-    void listarPorUsuario_retorna200() throws Exception {
+    void shouldReturn200WithUserReporteHistory() throws Exception {
         when(reporteService.obtenerPorUsuario(1L)).thenReturn(List.of(responseDTO));
 
         mockMvc.perform(get("/reportes-reciclaje/historial/1"))
@@ -105,7 +105,7 @@ class ReporteReciclajeControllerTest {
 
     @Test
     @WithMockUser
-    void buscarPorId_retorna200() throws Exception {
+    void shouldReturn200WhenReporteIdExists() throws Exception {
         when(reporteService.buscarPorId(1L)).thenReturn(Optional.of(responseDTO));
 
         mockMvc.perform(get("/reportes-reciclaje/1"))
@@ -115,7 +115,7 @@ class ReporteReciclajeControllerTest {
 
     @Test
     @WithMockUser
-    void buscarPorId_noExiste_retorna404() throws Exception {
+    void shouldReturn404WhenReporteIdDoesNotExist() throws Exception {
         when(reporteService.buscarPorId(99L)).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/reportes-reciclaje/99"))
@@ -124,7 +124,7 @@ class ReporteReciclajeControllerTest {
 
     @Test
     @WithMockUser
-    void eliminar_retorna204() throws Exception {
+    void shouldReturn204WhenReporteIsDeleted() throws Exception {
         mockMvc.perform(delete("/reportes-reciclaje/1").with(csrf()))
                 .andExpect(status().isNoContent());
     }

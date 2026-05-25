@@ -60,7 +60,7 @@ class CodigoValidacionControllerTest {
 
     @Test
     @WithMockUser
-    void generar_retorna201() throws Exception {
+    void shouldReturn201WhenCodigoIsGenerated() throws Exception {
         when(codigoService.generarCodigo(any())).thenReturn(responseDTO);
 
         mockMvc.perform(post("/codigos-validacion/generar")
@@ -74,7 +74,7 @@ class CodigoValidacionControllerTest {
 
     @Test
     @WithMockUser
-    void verificar_retorna200() throws Exception {
+    void shouldReturn200WhenCodigoIsValid() throws Exception {
         when(codigoService.verificarCodigo("A3F9B2C1")).thenReturn(true);
 
         mockMvc.perform(post("/codigos-validacion/verificar/A3F9B2C1")
@@ -85,7 +85,7 @@ class CodigoValidacionControllerTest {
 
     @Test
     @WithMockUser
-    void verificar_codigoUsado_retorna400() throws Exception {
+    void shouldReturn400WhenCodigoAlreadyUsed() throws Exception {
         when(codigoService.verificarCodigo("USADO123"))
                 .thenThrow(new IllegalArgumentException("El código ya fue usado"));
 

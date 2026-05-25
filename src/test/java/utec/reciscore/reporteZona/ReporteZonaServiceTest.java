@@ -98,7 +98,7 @@ class ReporteZonaServiceTest {
 
 
     @Test
-    void create_exitoso_retornaResponseDTO() {
+    void shouldReturnResponseDTOWhenCreateIsSuccessful() {
         mockAuth(user.getEmail());
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         when(reporteZonaRepository.findByUser(user)).thenReturn(new ArrayList<>());
@@ -115,7 +115,7 @@ class ReporteZonaServiceTest {
     }
 
     @Test
-    void create_zonaYaReportadaPorElMismoUsuario_lanzaDuplicateReportException() {
+    void shouldThrowExceptionWhenZoneAlreadyReportedByUser() {
         mockAuth(user.getEmail());
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
 
@@ -132,7 +132,7 @@ class ReporteZonaServiceTest {
     }
 
     @Test
-    void create_zonaDiferenteDelMismoUsuario_noLanzaExcepcion() {
+    void shouldNotThrowExceptionWhenZoneIsDifferent() {
         mockAuth(user.getEmail());
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
 
@@ -150,7 +150,7 @@ class ReporteZonaServiceTest {
     }
 
     @Test
-    void create_limite0_001EsExacto_consideraDuplicado() {
+    void shouldNotThrowExceptionWhenDistanceIsExactlyLimit() {
         mockAuth(user.getEmail());
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
 
@@ -168,7 +168,7 @@ class ReporteZonaServiceTest {
     }
 
     @Test
-    void create_con20ReportesEnMismaZona_creaPuntoMapaZonaSucia() {
+    void shouldCreateZonaSuciaWhen20ReportsInSameZone() {
         mockAuth(user.getEmail());
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         when(reporteZonaRepository.findByUser(user)).thenReturn(new ArrayList<>());
@@ -202,7 +202,7 @@ class ReporteZonaServiceTest {
     }
 
     @Test
-    void create_con19ReportesEnMismaZona_noCreaPuntoMapa() {
+    void shouldNotCreatePuntoMapaWhenLessThan20Reports() {
         mockAuth(user.getEmail());
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         when(reporteZonaRepository.findByUser(user)).thenReturn(new ArrayList<>());
@@ -228,7 +228,7 @@ class ReporteZonaServiceTest {
     }
 
     @Test
-    void create_reportesProcesadosNoContanParaUmbral() {
+    void shouldNotCountProcessedReportsTowardThreshold() {
         mockAuth(user.getEmail());
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         when(reporteZonaRepository.findByUser(user)).thenReturn(new ArrayList<>());
@@ -254,7 +254,7 @@ class ReporteZonaServiceTest {
     }
 
     @Test
-    void create_usuarioNoEncontrado_lanzaExcepcion() {
+    void shouldThrowExceptionWhenUserNotFound() {
         mockAuth("noexiste@reciscore.com");
         when(userRepository.findByEmail("noexiste@reciscore.com"))
                 .thenReturn(Optional.empty());
@@ -265,7 +265,7 @@ class ReporteZonaServiceTest {
 
 
     @Test
-    void getAll_retornaListaConUsername() {
+    void shouldReturnListWithUsernameWhenReportesExist() {
         when(reporteZonaRepository.findAll()).thenReturn(List.of(reporteZona));
         when(modelMapper.map(reporteZona, ReporteZonaResponseDTO.class))
                 .thenReturn(responseDTO);
@@ -278,7 +278,7 @@ class ReporteZonaServiceTest {
     }
 
     @Test
-    void getAll_sinReportes_retornaListaVacia() {
+    void shouldReturnEmptyListWhenNoReportesExist() {
         when(reporteZonaRepository.findAll()).thenReturn(new ArrayList<>());
 
         List<ReporteZonaResponseDTO> result = reporteZonaService.getAll();
@@ -288,7 +288,7 @@ class ReporteZonaServiceTest {
     }
 
     @Test
-    void getAll_variosReportes_retornaTodos() {
+    void shouldReturnAllReportesWhenMultipleExist() {
         User user2 = new User();
         user2.setId(2L);
         user2.setUsername("reciuser2");

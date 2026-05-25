@@ -17,21 +17,13 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(
-        value = AuthController.class,
-        excludeAutoConfiguration = UserDetailsServiceAutoConfiguration.class
-)
+@WebMvcTest(value = AuthController.class, excludeAutoConfiguration = UserDetailsServiceAutoConfiguration.class)
 class AuthControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-    @MockitoBean
-    private AuthService authService;
-    @MockitoBean
-    private utec.reciscore.auth.JwtService jwtService;
-    @MockitoBean
-    private org.springframework.security.core.userdetails.UserDetailsService userDetailsService;
+    @Autowired private MockMvc mockMvc;
+    @Autowired private ObjectMapper objectMapper;
+    @MockitoBean private AuthService authService;
+    @MockitoBean private JwtService jwtService;
+    @MockitoBean private org.springframework.security.core.userdetails.UserDetailsService userDetailsService;
 
     private RegisterRequestDTO registerDTO;
     private LoginRequestDTO loginDTO;
@@ -54,11 +46,10 @@ class AuthControllerTest {
 
     @Test
     @WithMockUser
-    void register_retorna201YToken() throws Exception {
+    void shouldReturn201AndTokenWhenRegisterIsSuccessful() throws Exception {
         when(authService.register(any())).thenReturn(authResponse);
 
-        mockMvc.perform(post("/auth/register")
-                        .with(csrf())
+        mockMvc.perform(post("/auth/register").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerDTO)))
                 .andExpect(status().isCreated())
@@ -67,23 +58,19 @@ class AuthControllerTest {
 
     @Test
     @WithMockUser
-    void register_camposVacios_retorna400() throws Exception {
-        RegisterRequestDTO vacio = new RegisterRequestDTO();
-
-        mockMvc.perform(post("/auth/register")
-                        .with(csrf())
+    void shouldReturn400WhenRegisterFieldsAreEmpty() throws Exception {
+        mockMvc.perform(post("/auth/register").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(vacio)))
+                        .content(objectMapper.writeValueAsString(new RegisterRequestDTO())))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     @WithMockUser
-    void login_retorna200YToken() throws Exception {
+    void shouldReturn200AndTokenWhenLoginIsSuccessful() throws Exception {
         when(authService.login(any())).thenReturn(authResponse);
 
-        mockMvc.perform(post("/auth/login")
-                        .with(csrf())
+        mockMvc.perform(post("/auth/login").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginDTO)))
                 .andExpect(status().isOk())
@@ -92,12 +79,10 @@ class AuthControllerTest {
 
     @Test
     @WithMockUser
-    void login_credencialesInvalidas_retorna400() throws Exception {
-        when(authService.login(any()))
-                .thenThrow(new IllegalArgumentException("Credenciales inválidas"));
+    void shouldReturn400WhenLoginCredentialsAreInvalid() throws Exception {
+        when(authService.login(any())).thenThrow(new IllegalArgumentException("Credenciales inválidas"));
 
-        mockMvc.perform(post("/auth/login")
-                        .with(csrf())
+        mockMvc.perform(post("/auth/login").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginDTO)))
                 .andExpect(status().isBadRequest());

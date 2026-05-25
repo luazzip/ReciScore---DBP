@@ -48,7 +48,7 @@ class RankingServiceTest {
     }
 
     @Test
-    void getRanking_retornaOrdenadoPorPuntos() {
+    void shouldReturnRankingOrderedByPointsDesc() {
         when(rankingRepository.findAllOrderByPointsDesc()).thenReturn(List.of(user1, user2));
 
         List<RankingResponseDTO> ranking = rankingService.getRanking();
@@ -60,7 +60,7 @@ class RankingServiceTest {
     }
 
     @Test
-    void getRanking_asignaPosicionCorrectamente() {
+    void shouldAssignCorrectPositionToEachUser() {
         when(rankingRepository.findAllOrderByPointsDesc()).thenReturn(List.of(user1, user2));
 
         List<RankingResponseDTO> ranking = rankingService.getRanking();
@@ -70,7 +70,7 @@ class RankingServiceTest {
     }
 
     @Test
-    void getRanking_listaVacia_retornaVacia() {
+    void shouldReturnEmptyListWhenNoUsersExist() {
         when(rankingRepository.findAllOrderByPointsDesc()).thenReturn(List.of());
 
         List<RankingResponseDTO> ranking = rankingService.getRanking();
@@ -80,7 +80,7 @@ class RankingServiceTest {
     }
 
     @Test
-    void getRankingByLocation_retornaFiltradoPorDistrito() {
+    void shouldReturnFilteredRankingWhenLocationMatches() {
         when(rankingRepository.findByLocationOrderByPointsDesc("Miraflores"))
                 .thenReturn(List.of(user1));
 
@@ -92,7 +92,7 @@ class RankingServiceTest {
     }
 
     @Test
-    void getRankingByLocation_sinUsuarios_retornaVacia() {
+    void shouldReturnEmptyListWhenNoUsersInLocation() {
         when(rankingRepository.findByLocationOrderByPointsDesc("Barranco"))
                 .thenReturn(List.of());
 

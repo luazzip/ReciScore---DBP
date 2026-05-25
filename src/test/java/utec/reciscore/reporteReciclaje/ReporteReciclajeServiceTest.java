@@ -95,7 +95,7 @@ class ReporteReciclajeServiceTest {
     }
 
     @Test
-    void crear_gpsValidoIaValida_ganaPuntos() {
+    void shouldAddPointsWhenGpsAndIaAreValid() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(materialRepository.findById(1L)).thenReturn(Optional.of(material));
         when(puntoMapaService.estaEnZonaValida(anyDouble(), anyDouble())).thenReturn(true);
@@ -110,7 +110,7 @@ class ReporteReciclajeServiceTest {
     }
 
     @Test
-    void crear_gpsInvalido_noGanaPuntos() {
+    void shouldNotAddPointsWhenGpsIsInvalid() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(materialRepository.findById(1L)).thenReturn(Optional.of(material));
         when(puntoMapaService.estaEnZonaValida(anyDouble(), anyDouble())).thenReturn(false);
@@ -124,7 +124,7 @@ class ReporteReciclajeServiceTest {
     }
 
     @Test
-    void crear_iaInvalida_noGanaPuntos() {
+    void shouldNotAddPointsWhenIaValidationFails() {
         requestDTO.setMaterialDetectadoIa(false);
         reporte.setMaterialDetectadoIa(false);
         reporte.setValidadoIa(false);
@@ -142,7 +142,7 @@ class ReporteReciclajeServiceTest {
     }
 
     @Test
-    void crear_usuarioNoExiste_lanzaExcepcion() {
+    void shouldThrowExceptionWhenUserDoesNotExist() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class,
@@ -152,7 +152,7 @@ class ReporteReciclajeServiceTest {
     }
 
     @Test
-    void crear_materialNoExiste_lanzaExcepcion() {
+    void shouldThrowExceptionWhenMaterialDoesNotExist() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(materialRepository.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -163,7 +163,7 @@ class ReporteReciclajeServiceTest {
     }
 
     @Test
-    void crear_multiplicadorAplica() {
+    void shouldApplyMultiplierWhenCalculatingPoints() {
         user.setMultiplier(2.0);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(materialRepository.findById(1L)).thenReturn(Optional.of(material));
@@ -176,7 +176,7 @@ class ReporteReciclajeServiceTest {
     }
 
     @Test
-    void obtenerPorUsuario_retornaHistorial() {
+    void shouldReturnHistoryWhenUserHasReportes() {
         when(reporteRepository.findByUsuarioId(1L)).thenReturn(List.of(reporte));
 
         List<ReporteReciclajeResponseDTO> response = reporteService.obtenerPorUsuario(1L);

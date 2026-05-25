@@ -43,7 +43,7 @@ class RankingControllerTest {
 
     @Test
     @WithMockUser
-    void getRanking_retorna200() throws Exception {
+    void shouldReturn200WithRankingList() throws Exception {
         when(rankingService.getRanking()).thenReturn(List.of(rankingResponse));
 
         mockMvc.perform(get("/ranking"))
@@ -54,7 +54,7 @@ class RankingControllerTest {
 
     @Test
     @WithMockUser
-    void getRankingByLocation_retorna200() throws Exception {
+    void shouldReturn200WithFilteredRankingWhenLocationExists() throws Exception {
         when(rankingService.getRankingByLocation("Miraflores"))
                 .thenReturn(List.of(rankingResponse));
 
@@ -65,7 +65,7 @@ class RankingControllerTest {
 
     @Test
     @WithMockUser
-    void getRankingByLocation_sinUsuarios_retornaListaVacia() throws Exception {
+    void shouldReturn200WithEmptyListWhenNoUsersInLocation() throws Exception {
         when(rankingService.getRankingByLocation("Barranco")).thenReturn(List.of());
 
         mockMvc.perform(get("/ranking/distrito/Barranco"))

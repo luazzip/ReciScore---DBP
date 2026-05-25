@@ -69,7 +69,7 @@ class CodigoValidacionServiceTest {
     }
 
     @Test
-    void generarCodigo_exitoso() {
+    void shouldGenerateCodigoWhenUserAndPuntoMapaExist() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(puntoMapaRepository.findById(1L)).thenReturn(Optional.of(puntoMapa));
         when(codigoRepository.save(any())).thenReturn(codigo);
@@ -85,7 +85,7 @@ class CodigoValidacionServiceTest {
     }
 
     @Test
-    void generarCodigo_usuarioNoExiste_lanzaExcepcion() {
+    void shouldThrowExceptionWhenUserDoesNotExistForCodigo() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class,
@@ -95,7 +95,7 @@ class CodigoValidacionServiceTest {
     }
 
     @Test
-    void generarCodigo_puntoMapaNoExiste_lanzaExcepcion() {
+    void shouldThrowExceptionWhenPuntoMapaDoesNotExist() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(puntoMapaRepository.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -106,7 +106,7 @@ class CodigoValidacionServiceTest {
     }
 
     @Test
-    void verificarCodigo_exitoso() {
+    void shouldReturnTrueAndMarkUsedWhenCodigoIsValid() {
         when(codigoRepository.findByCodigo("A3F9B2C1")).thenReturn(Optional.of(codigo));
         when(codigoRepository.save(any())).thenReturn(codigo);
 
@@ -118,7 +118,7 @@ class CodigoValidacionServiceTest {
     }
 
     @Test
-    void verificarCodigo_yaUsado_lanzaExcepcion() {
+    void shouldThrowExceptionWhenCodigoAlreadyUsed() {
         codigo.setUsado(true);
         when(codigoRepository.findByCodigo("A3F9B2C1")).thenReturn(Optional.of(codigo));
 
@@ -129,7 +129,7 @@ class CodigoValidacionServiceTest {
     }
 
     @Test
-    void verificarCodigo_expirado_lanzaExcepcion() {
+    void shouldThrowExceptionWhenCodigoIsExpired() {
         codigo.setFechaExpiracion(LocalDateTime.now().minusMinutes(1));
         when(codigoRepository.findByCodigo("A3F9B2C1")).thenReturn(Optional.of(codigo));
 
@@ -140,7 +140,7 @@ class CodigoValidacionServiceTest {
     }
 
     @Test
-    void verificarCodigo_noExiste_lanzaExcepcion() {
+    void shouldThrowExceptionWhenCodigoDoesNotExist() {
         when(codigoRepository.findByCodigo(anyString())).thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class,
