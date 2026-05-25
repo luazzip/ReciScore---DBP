@@ -33,6 +33,11 @@ public class ReporteZonaController {
         );
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        reporteZonaService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 
 
 
