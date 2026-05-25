@@ -112,7 +112,7 @@ class ReporteZonaControllerTest {
         mockMvc.perform(post("/reportes-zona")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDTO)))
+                        .content(objectMapper.writeValueAsString(requestDTO)));
     }
 
 
@@ -164,7 +164,7 @@ class ReporteZonaControllerTest {
 
     @Test
     void getAll_sinAutenticacion_retorna401() throws Exception {
-        mockMvc.perform(get("/reportes-zona"))
+        mockMvc.perform(get("/reportes-zona"));
     }
 
     @Test
