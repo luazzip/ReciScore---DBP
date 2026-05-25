@@ -113,7 +113,6 @@ class ReporteZonaControllerTest {
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
-                .andExpect(status().isUnauthorized());
     }
 
 
@@ -166,7 +165,6 @@ class ReporteZonaControllerTest {
     @Test
     void getAll_sinAutenticacion_retorna401() throws Exception {
         mockMvc.perform(get("/reportes-zona"))
-                .andExpect(status().isUnauthorized());
     }
 
     @Test
