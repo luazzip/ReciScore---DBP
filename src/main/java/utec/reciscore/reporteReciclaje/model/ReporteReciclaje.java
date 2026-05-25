@@ -20,15 +20,15 @@ public class ReporteReciclaje {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long numeroReporte;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User usuario;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "material_id", nullable = false)
     private Material material;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "punto_mapa_id")
     private PuntoMapa puntoMapa;
 
