@@ -70,4 +70,6 @@ public class User {
     @Column(nullable = false)
     private Role role = Role.USER;
 
+    @Version private Long version;
+
 }
