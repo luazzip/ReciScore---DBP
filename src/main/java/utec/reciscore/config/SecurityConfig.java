@@ -36,7 +36,8 @@ public class SecurityConfig {
                         .requestMatchers("/reportes-reciclaje/**").hasRole("USER")
                         .requestMatchers("/desafios/*/unirse").hasRole("USER")
                         .requestMatchers("/reciclajes/**").hasRole("USER")
-
+                        .requestMatchers(HttpMethod.POST, "/reportes-zona/**")
+                        .hasRole("USER")
                         .requestMatchers(HttpMethod.DELETE, "/users/**").authenticated()
                         .anyRequest().authenticated()
                 )

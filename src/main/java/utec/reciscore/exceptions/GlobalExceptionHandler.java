@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
     }
 
     //conflictos por duplicado
-    @ExceptionHandler({DataIntegrityViolationException.class, DuplicateUserException.class})
+    @ExceptionHandler({DataIntegrityViolationException.class, DuplicateUserException.class, DuplicateReportException.class})
     public ResponseEntity<String> handleDuplicate(Exception exception) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
     }
