@@ -209,7 +209,6 @@ class ReporteZonaServiceTest {
         when(modelMapper.map(requestDTO, ReporteZona.class)).thenReturn(reporteZona);
         when(reporteZonaRepository.save(reporteZona)).thenReturn(reporteZona);
 
-        // Solo 19 reportes → no debe dispararse la creación del punto
         List<ReporteZona> reportes19 = new ArrayList<>();
         for (int i = 0; i < 19; i++) {
             ReporteZona r = new ReporteZona();

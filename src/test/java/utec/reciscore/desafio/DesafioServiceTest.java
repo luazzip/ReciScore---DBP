@@ -151,7 +151,6 @@ class DesafioServiceTest {
 
     @Test
     void unirse_usuarioYaInscrito_lanzaExcepcion() {
-        // Arrange
         desafio.getUsuariosInscritos().add(user);
         when(desafioRepository.findById(1L)).thenReturn(Optional.of(desafio));
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
