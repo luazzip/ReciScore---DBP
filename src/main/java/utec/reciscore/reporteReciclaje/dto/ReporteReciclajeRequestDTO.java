@@ -25,13 +25,6 @@ public class ReporteReciclajeRequestDTO {
     @Min(value = 1, message = "Debe haber al menos 1 artículo")
     private Integer numeroArticulos;
 
-    @NotNull
-    private Boolean materialDetectadoIa;
-
-    @DecimalMin(value = "0.0")
-    @DecimalMax(value = "1.0")
-    private Double confianzaIa;
-
     @NotNull(message = "La latitud es obligatoria")
     private Double latitud;
 
