@@ -28,4 +28,15 @@ public class EmailService {
         );
         mailSender.send(message);
     }
+
+    @Async
+    @EventListener
+    public void handleReciclajeValidado(ReciclajeValidadoEvent event) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(event.getEmailUsuario());
+        message.setSubject("¡Reciclaje registrado en ReciScore!");
+        message.setText("Has ganado " + event.getPuntosGanados() +
+                " puntos por reciclar " + event.getMaterialNombre() + ". ¡Sigue así!");
+        mailSender.send(message);
+    }
 }

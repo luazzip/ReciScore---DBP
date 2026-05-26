@@ -50,11 +50,11 @@ public class Desafio {
     private Boolean activo;
 
     //relacion con usuarios
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "user_desafio",
             joinColumns = @JoinColumn(name = "desafio_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set<User> usuariosInscritos=new HashSet<>();
+    private Set<User> usuariosInscritos = new HashSet<>();
 }
