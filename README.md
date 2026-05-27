@@ -9,7 +9,7 @@ Validación y Gamificación del Reciclaje
 **Integrantes:**
 
 - Gamero Goyzueta, Ximena \- Código: 202510310  
-- Geraldo Soto, Joseph \- Código: 202510412  
+- Geraldo Soto, Joseph Paulo \- Código: 202510412  
 - Meniz Cueva, Luana Yolanda  \- Código: 202510593  
 - Nieva Carbajal, Luis Enrique \- Código: 202510344
 
@@ -112,7 +112,9 @@ Desarrollo Basado en Plataformas (CS2031)
   El flujo de registro de reciclaje implementa tres fases secuenciales:
 
 
-  **Fase A \- Validación por IA:** La foto enviada en base64 se envía al VisionService, que llama a la Google Cloud Vision API solicitando detección de etiquetas (LABEL\_DETECTION) y localización de objetos (OBJECT\_LOCALIZATION). El sistema mapea las etiquetas detectadas con un diccionario interno (LABEL\_TO\_MATERIAL) que asocia términos en inglés reconocidos por Vision con las categorías del sistema. Si la confianza del mejor match supera el 60% y la categoría coincide con el material declarado por el usuario, el reciclaje se considera válido por IA. 
+  **Fase A \- Validación por IA:** La foto enviada en base64 se envía al VisionService, que llama a la Google Cloud Vision API solicitando detección de etiquetas (LABEL\_DETECTION) y localización de objetos (OBJECT\_LOCALIZATION). El sistema mapea las etiquetas detectadas con un diccionario interno (LABEL\_TO\_MATERIAL) que asocia términos en inglés reconocidos por Vision con las categorías del sistema. Si la confianza del mejor match supera el 60% y la categoría coincide con el material declarado por el usuario, el reciclaje se considera válido por IA.
+
+  Información importante: En el repositorio se agregaron dos archivos: **requirements.txt** y **servicio-ia_reconocimiento_matReciclaje.py** estos dos para poder funcionar tienen que correrlo desde un proyecto independiente en PyCharm preferiblemente y con la versión de Python desde la 3.9 a la 3.11 máximo. Cuando lo coloquen en un nuevo proyecto deben instalar todo lo que se pone en requerimientos y posteriormente colocar en la terminal **uvicorn servicio-ia_reconocimiento_matReciclaje:app --reload --port 8000**, luego se corre el proyecto de Intellij Idea y se hacen las pruebas. 
 
 
   **Fase B \- Validación GPS:** Al recibir el request, el servicio consulta PuntoMapaRepository para determinar si las coordenadas enviadas están dentro del radio de algún punto de acopio verificado. El resultado (booleano \+ distancia \+ nombre del punto) se almacena para el cálculo de puntos y la respuesta al usuario.
