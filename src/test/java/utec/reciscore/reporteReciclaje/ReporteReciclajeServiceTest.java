@@ -88,8 +88,6 @@ class ReporteReciclajeServiceTest {
         requestDTO.setFotoUrl("http://foto.com/foto.jpg");
         requestDTO.setTamanoObjeto(TamanoObjeto.PEQUENO);
         requestDTO.setNumeroArticulos(3);
-        requestDTO.setMaterialDetectadoIa(true);
-        requestDTO.setConfianzaIa(0.95);
         requestDTO.setLatitud(-12.1191);
         requestDTO.setLongitud(-77.0308);
     }
@@ -125,7 +123,6 @@ class ReporteReciclajeServiceTest {
 
     @Test
     void shouldNotAddPointsWhenIaValidationFails() {
-        requestDTO.setMaterialDetectadoIa(false);
         reporte.setMaterialDetectadoIa(false);
         reporte.setValidadoIa(false);
 

@@ -41,7 +41,7 @@ class AuthControllerTest {
         loginDTO.setEmail("luis@gmail.com");
         loginDTO.setPassword("123456");
 
-        authResponse = new AuthResponseDTO("token123");
+        authResponse = new AuthResponseDTO("token123", "refresh123");
     }
 
     @Test

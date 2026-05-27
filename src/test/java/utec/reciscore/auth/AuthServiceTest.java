@@ -54,7 +54,8 @@ class AuthServiceTest {
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         when(passwordEncoder.encode(anyString())).thenReturn("hashedPassword");
         when(userRepository.save(any())).thenReturn(user);
-        when(jwtService.generateToken(anyString())).thenReturn("token123");
+        when(jwtService.generateToken(anyString(), anyLong(), anyString())).thenReturn("token123");
+        when(jwtService.generateRefreshToken(anyString())).thenReturn("refresh123");
 
         AuthResponseDTO response = authService.register(registerDTO);
 
@@ -84,7 +85,8 @@ class AuthServiceTest {
     void shouldReturnTokenWhenLoginCredentialsAreValid() {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
-        when(jwtService.generateToken(anyString())).thenReturn("token123");
+        when(jwtService.generateToken(anyString(), anyLong(), anyString())).thenReturn("token123");
+        when(jwtService.generateRefreshToken(anyString())).thenReturn("refresh123");
 
         AuthResponseDTO response = authService.login(loginDTO);
 
