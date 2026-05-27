@@ -1,8 +1,10 @@
 package utec.reciscore.exceptions;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,39 +15,77 @@ import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    //validaciones de dto con @Valid
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String,String>> handleValidation(MethodArgumentNotValidException exception){
-        Map<String,String> errores = new HashMap<>();
-        exception.getBindingResult().getFieldErrors()
-                .forEach(e->errores.put(e.getField(),e.getDefaultMessage()));
-        return ResponseEntity.badRequest().body(errores);
+    public ResponseEntity<Map<String, String>> handleValidation(
+            MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors()
+                .forEach(e -> errors.put(e.getField(), e.getDefaultMessage()));
+        return ResponseEntity.badRequest().body(errors);
     }
 
-    //no encontrado
-    @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<String> handleNotFound(NoSuchElementException exception){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleUnreadable(
+            HttpMessageNotReadableException ex, HttpServletRequest req) {
+        return ResponseEntity.badRequest().body(
+                new ErrorResponse(400, "Bad Request", "JSON malformado o campo inválido", req.getRequestURI()));
     }
 
-    //validaciones de negocio
+    @ExceptionHandler({NoSuchElementException.class, ResourceNotFoundException.class})
+    public ResponseEntity<ErrorResponse> handleNotFound(
+            RuntimeException ex, HttpServletRequest req) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ErrorResponse(404, "Not Found", ex.getMessage(), req.getRequestURI()));
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException exception) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage()); //"Categoría inválida. Los valores permitidos son: PLASTICO, VIDRIO, PAPEL, METAL."
+    public ResponseEntity<ErrorResponse> handleIllegalArgument(
+            IllegalArgumentException ex, HttpServletRequest req) {
+        return ResponseEntity.badRequest().body(
+                new ErrorResponse(400, "Bad Request", ex.getMessage(), req.getRequestURI()));
     }
 
-    //conflictos por duplicado
-    @ExceptionHandler({DataIntegrityViolationException.class, DuplicateUserException.class, DuplicateReportException.class})
-    public ResponseEntity<String> handleDuplicate(Exception exception) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
+    @ExceptionHandler(InvalidOperationException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidOp(
+            InvalidOperationException ex, HttpServletRequest req) {
+        return ResponseEntity.badRequest().body(
+                new ErrorResponse(400, "Invalid Operation", ex.getMessage(), req.getRequestURI()));
     }
 
-    //fallback general
+    @ExceptionHandler(IaValidationException.class)
+    public ResponseEntity<ErrorResponse> handleIaValidation(
+            IaValidationException ex, HttpServletRequest req) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(
+                new ErrorResponse(422, "IA Validation Failed", ex.getMessage(), req.getRequestURI()));
+    }
+
+    @ExceptionHandler(GpsValidationException.class)
+    public ResponseEntity<ErrorResponse> handleGps(
+            GpsValidationException ex, HttpServletRequest req) {
+        return ResponseEntity.badRequest().body(
+                new ErrorResponse(400, "GPS Validation Failed", ex.getMessage(), req.getRequestURI()));
+    }
+
+    @ExceptionHandler({DataIntegrityViolationException.class,
+            DuplicateUserException.class, DuplicateReportException.class})
+    public ResponseEntity<ErrorResponse> handleDuplicate(
+            Exception ex, HttpServletRequest req) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                new ErrorResponse(409, "Conflict", ex.getMessage(), req.getRequestURI()));
+    }
+
+    @ExceptionHandler(UnauthorizedOperationException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorized(
+            UnauthorizedOperationException ex, HttpServletRequest req) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                new ErrorResponse(403, "Forbidden", ex.getMessage(), req.getRequestURI()));
+    }
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGeneral(Exception exception) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado");
+    public ResponseEntity<ErrorResponse> handleGeneral(
+            Exception ex, HttpServletRequest req) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                new ErrorResponse(500, "Internal Server Error", "Error inesperado", req.getRequestURI()));
     }
-
-
-
 }

@@ -1,6 +1,7 @@
 package utec.reciscore.puntoMapa.application;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import utec.reciscore.puntoMapa.dto.PuntoMapaRequestDTO;
@@ -11,12 +12,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/puntos-mapa")
+@RequiredArgsConstructor
 public class PuntoMapaController {
     private final PuntoMapaService puntoMapaService;
 
-    public PuntoMapaController(PuntoMapaService service) {
-        this.puntoMapaService = service;
-    }
 
     @PostMapping
     public ResponseEntity<PuntoMapaResponseDTO> crear(@Valid @RequestBody PuntoMapaRequestDTO dto) {

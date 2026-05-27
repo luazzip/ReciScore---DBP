@@ -6,6 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import utec.reciscore.ia.IaClient;
+import utec.reciscore.ia.IaResponse;
 import utec.reciscore.material.infrastructure.MaterialRepository;
 import utec.reciscore.material.model.Material;
 import utec.reciscore.material.model.TipoMaterial;
@@ -30,19 +32,16 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ReporteReciclajeServiceTest {
-
     @Mock
     private ReporteReciclajeRepository reporteRepository;
-
     @Mock
     private UserRepository userRepository;
-
     @Mock
     private MaterialRepository materialRepository;
-
     @Mock
     private PuntoMapaService puntoMapaService;
-
+    @Mock
+    private IaClient iaClient;
     @InjectMocks
     private ReporteReciclajeService reporteService;
 
@@ -88,10 +87,14 @@ class ReporteReciclajeServiceTest {
         requestDTO.setFotoUrl("http://foto.com/foto.jpg");
         requestDTO.setTamanoObjeto(TamanoObjeto.PEQUENO);
         requestDTO.setNumeroArticulos(3);
-        requestDTO.setMaterialDetectadoIa(true);
-        requestDTO.setConfianzaIa(0.95);
         requestDTO.setLatitud(-12.1191);
         requestDTO.setLongitud(-77.0308);
+
+        IaResponse iaResponse = new IaResponse();
+        iaResponse.setTipoMaterial("PLASTICO");
+        iaResponse.setConfidence(0.95);
+        iaResponse.setRecyclable(true);
+        lenient().when(iaClient.classify(anyString())).thenReturn(iaResponse);
     }
 
     @Test
@@ -125,9 +128,13 @@ class ReporteReciclajeServiceTest {
 
     @Test
     void shouldNotAddPointsWhenIaValidationFails() {
-        requestDTO.setMaterialDetectadoIa(false);
         reporte.setMaterialDetectadoIa(false);
         reporte.setValidadoIa(false);
+        IaResponse iaFail = new IaResponse();
+        iaFail.setTipoMaterial("VIDRIO");
+        iaFail.setConfidence(0.40);
+        iaFail.setRecyclable(true);
+        lenient().when(iaClient.classify(anyString())).thenReturn(iaFail);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(materialRepository.findById(1L)).thenReturn(Optional.of(material));

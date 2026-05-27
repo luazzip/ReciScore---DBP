@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -27,6 +29,13 @@ class UserRepositoryContainerTest {
             .withDatabaseName("reciscore_test")
             .withUsername("test")
             .withPassword("test");
+
+    @DynamicPropertySource
+    static void configureProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgres::getJdbcUrl);
+        registry.add("spring.datasource.username", postgres::getUsername);
+        registry.add("spring.datasource.password", postgres::getPassword);
+    }
 
     @Autowired
     private UserRepository userRepository;
@@ -66,7 +75,7 @@ class UserRepositoryContainerTest {
     }
 
     @Test
-    void shouldFindUserByEmailWhenExists() {
+    void shouldFindUserByEmailWhenExistsInPostgres() {
         Optional<User> result = userRepository.findByEmail("ana@test.com");
         assertTrue(result.isPresent());
         assertEquals("Ana", result.get().getName());
@@ -78,14 +87,14 @@ class UserRepositoryContainerTest {
     }
 
     @Test
-    void shouldReturnUsersOrderedByPointsDescWhenMultipleExist() {
+    void shouldReturnUsersOrderedByPointsDescWhenMultipleExistInPostgres() {
         List<User> result = userRepository.findAllByOrderByPointsDesc();
         assertEquals(2, result.size());
         assertTrue(result.get(0).getPoints() >= result.get(1).getPoints());
     }
 
     @Test
-    void shouldFilterUsersByLocationIgnoringCaseWhenLocationMatches() {
+    void shouldFilterUsersByLocationIgnoringCaseInPostgres() {
         List<User> result = userRepository.findByLocationIgnoreCaseOrderByPointsDesc("lima");
         assertEquals(1, result.size());
         assertEquals("Ana", result.get(0).getName());

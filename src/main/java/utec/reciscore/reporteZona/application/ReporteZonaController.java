@@ -2,6 +2,7 @@ package utec.reciscore.reporteZona.application;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import utec.reciscore.reporteZona.dto.ReporteZonaRequestDTO;
@@ -18,11 +19,10 @@ public class ReporteZonaController {
 
     @PostMapping
     public ResponseEntity<ReporteZonaResponseDTO> create(
-            @RequestBody @Valid ReporteZonaRequestDTO dto
+           @Valid @RequestBody  ReporteZonaRequestDTO dto
     ) {
-        return ResponseEntity.ok(
-                reporteZonaService.create(dto)
-        );
+        return ResponseEntity.status(HttpStatus.CREATED)     // cambiar a 201
+                .body(reporteZonaService.create(dto));
     }
 
     @GetMapping

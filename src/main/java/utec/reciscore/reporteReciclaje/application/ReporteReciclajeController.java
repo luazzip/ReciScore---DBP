@@ -2,6 +2,7 @@ package utec.reciscore.reporteReciclaje.application;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import utec.reciscore.reporteReciclaje.dto.ReporteReciclajeRequestDTO;
@@ -18,7 +19,7 @@ public class ReporteReciclajeController {
 
     @PostMapping
     public ResponseEntity<ReporteReciclajeResponseDTO> crear(@Valid @RequestBody ReporteReciclajeRequestDTO dto) {
-        return ResponseEntity.ok(reporteService.crear(dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(reporteService.crear(dto));
     }
 
     @GetMapping
