@@ -19,7 +19,7 @@ public class ReporteZonaController {
 
     @PostMapping
     public ResponseEntity<ReporteZonaResponseDTO> create(
-            @Valid @RequestBody ReporteZonaRequestDTO dto
+           @Valid @RequestBody  ReporteZonaRequestDTO dto
     ) {
         return ResponseEntity.status(HttpStatus.CREATED)     // cambiar a 201
                 .body(reporteZonaService.create(dto));
