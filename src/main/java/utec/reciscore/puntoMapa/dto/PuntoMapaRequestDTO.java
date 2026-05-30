@@ -2,10 +2,12 @@ package utec.reciscore.puntoMapa.dto;
 
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import utec.reciscore.puntoMapa.model.TipoPunto;
 
 @Data
 @NoArgsConstructor
@@ -21,4 +23,11 @@ public class PuntoMapaRequestDTO {
     @DecimalMin(value = "-180.0", message = "Longitud mínima: -180")
     @DecimalMax(value = "180.0",  message = "Longitud máxima: 180")
     private Double longitude;
+
+    @NotBlank(message = "El nombre es obligatorio")
+    private String nombre;
+
+    @NotNull(message = "El tipo es obligatorio")
+    private TipoPunto tipo;
 }
+

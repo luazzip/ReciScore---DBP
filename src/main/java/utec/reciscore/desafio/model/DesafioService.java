@@ -21,11 +21,8 @@ public class DesafioService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    //----------------------- crear desafio --------------------------
+    // crear desafio
     public DetailDesafioResponse createDesafio(CreateDesafioRequest request){
-        if (desafioRepository.existsByCategoria(request.getCategoria())) {
-            throw new IllegalArgumentException("La categoria ya existe");
-        }
         if(request.getFecha_fin().isBefore(request.getFecha_inicio())){
             throw new IllegalArgumentException("La fecha de fin no puede ser anterior a la fecha de inicio");
         }
@@ -37,7 +34,7 @@ public class DesafioService {
     }
 
 
-    //----------------------- obtener desafios -------------------------
+    // obtener desafios
     public List<ListDesafioResponse> findAll() {
         List<Desafio> desafios=desafioRepository.findAll();
 
@@ -51,7 +48,7 @@ public class DesafioService {
     }
 
 
-    //------------------------- obtener desafio por id ----------------------
+    //obtener desafio por id
     public DetailDesafioResponse findById(Long id) {
         Desafio desafio=desafioRepository.findById(id)
                 .orElseThrow(()-> new NoSuchElementException("No se encontró el desafío con id: "+ id));
@@ -60,7 +57,7 @@ public class DesafioService {
     }
 
 
-    //-------------------- usuario se une o acepta desafio -------------------
+    // usuario se une o acepta desafio
     public DetailDesafioResponse unirse(Long desafioId,Long userId) {
         //buscar desafio
         Desafio desafio=desafioRepository.findById(desafioId)
@@ -83,7 +80,7 @@ public class DesafioService {
     }
 
 
-    //------------------------- editar desafio --------------------------------
+    //editar desafio
     public DetailDesafioResponse updateDesafio(Long id, UpdateDesafioRequest request) {
         //buscar desafio
         Desafio desafio=desafioRepository.findById(id)

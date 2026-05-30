@@ -19,7 +19,6 @@ import java.util.Optional;
 public class PuntoMapaService {
     private static final double radio_permitido_metros = 50.0;
 
-    @Autowired
     private final PuntoMapaRepository puntoMapaRepository;
     private final ModelMapper modelMapper;
 
@@ -27,6 +26,8 @@ public class PuntoMapaService {
         PuntoMapa punto = new PuntoMapa();
         punto.setLatitude(puntoMapa.getLatitude());
         punto.setLongitude(puntoMapa.getLongitude());
+        punto.setNombre(puntoMapa.getNombre());
+        punto.setTipo(puntoMapa.getTipo());
         return toDto(puntoMapaRepository.save(punto));
     }
 
@@ -41,7 +42,7 @@ public class PuntoMapaService {
 
     public PuntoMapaResponseDTO buscarPorId(Long id) {
         PuntoMapa puntoMapa=puntoMapaRepository.findById(id)
-                .orElseThrow(()->new NoSuchElementException("No se encontró el dasfío con id: "+id));
+                .orElseThrow(()->new NoSuchElementException("No se encontró el desafío con id: "+id));
         return modelMapper.map(puntoMapa,PuntoMapaResponseDTO.class);
     }
 
@@ -59,6 +60,8 @@ public class PuntoMapaService {
         dto.setId(punto.getId());
         dto.setLatitude(punto.getLatitude());
         dto.setLongitude(punto.getLongitude());
+        dto.setNombre(punto.getNombre());
+        dto.setTipo(punto.getTipo());
         return dto;
     }
 }

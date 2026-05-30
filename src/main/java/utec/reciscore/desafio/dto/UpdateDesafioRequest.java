@@ -1,6 +1,7 @@
 package utec.reciscore.desafio.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,6 @@ public class UpdateDesafioRequest {
     @NotBlank(message = "La categoría no puede estar vacía")
     private String categoria;
 
-    @NotBlank(message = "El campo activo debe ser true o false")
+    @NotNull(message = "El campo activo debe ser true o false")
     private Boolean activo;
 }

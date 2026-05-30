@@ -1,0 +1,1450 @@
+{
+  "info": {
+    "_postman_id": "12c846f7-84b4-40c3-b7c6-fdad4be544f0",
+    "name": "ReciScore API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53434433",
+    "_collection_link": "https://go.postman.co/collection/53434433-12c846f7-84b4-40c3-b7c6-fdad4be544f0?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"pierod@test.com\",\r\n  \"password\": \"12345d678\",\r\n  \"name\": \"Piero\",\r\n  \"username\": \"pierotdest\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Register",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"email\": \"piero@test.com\",\r\n  \"password\": \"12345678\",\r\n  \"name\": \"Piero\",\r\n  \"username\": \"pierotest\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "description": "",
+                  "type": "text"
+                }
+              ],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": "{\n    \"token\": \"eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJwaWVyb0B0ZXN0LmNvbSIsImlhdCI6MTc3OTg1Mzk5MiwiZXhwIjoxNzc5OTQwMzkyfQ.vrp7D11Vweo4Z7TK279fB-sbUTHKtXHxeB2OktAJjicdki5ZpbHQrPAuuRVMX3Mp\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json();\r",
+                  "\r",
+                  "pm.collectionVariables.set(\"token\", data.token);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"piero@test.com\",\r\n  \"password\": \"12345678\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Login",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"email\": \"piero@test.com\",\r\n  \"password\": \"12345678\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "description": "",
+                  "type": "text"
+                }
+              ],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": "{\n    \"token\": \"eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJwaWVyb0B0ZXN0LmNvbSIsImlhdCI6MTc3OTg1MDcwMSwiZXhwIjoxNzc5OTM3MTAxfQ.mtrPk_3ug9kfYTTU1s9Wd4Og9qiwOi7CcvBxUaV302aLAgNl0AEBctAUR7_q1AnP\"\n}"
+            }
+          ]
+        }
+      ],
+      "description": "(`/auth/register`, `/auth/login`)\n\nPermiten el registro e inicio de sesión de usuarios mediante JWT, asegurando autenticación segura en la plataforma. Son la base para controlar acceso y personalizar funcionalidades según el usuario. También permiten manejar roles y sesiones sin estado."
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"user@test.com\",\r\n  \"password\": \"12345678\",\r\n  \"name\": \"User Test\",\r\n  \"username\": \"usertest\",\r\n  \"profilePicture\": \"https://foto.com/img.jpg\",\r\n  \"location\": \"Lima\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User By Id",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users/2",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Nuevo Nombre\",\r\n  \"location\": \"Barranco\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "## (`/users`)\n\nPermiten crear, consultar, actualizar y eliminar usuarios del sistema. Son esenciales para la gestión de perfiles y datos personales dentro de la aplicación. Facilitan la administración de cuentas y control de acceso.  \n**Sí requiere autenticación** (`authenticated()`), excepto registro."
+    },
+    {
+      "name": "Material",
+      "item": [
+        {
+          "name": "Create Material",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Plástico\",\r\n  \"pointsPerKg\": 2.5,\r\n  \"weight\": 1.0,\r\n  \"category\": \"PLASTICO\",\r\n  \"recyclable\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/material",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "material"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Create Material",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Plástico\",\r\n  \"pointsPerKg\": 2.5,\r\n  \"weight\": 1.0,\r\n  \"category\": \"PLASTICO\",\r\n  \"recyclable\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/material",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "material"
+                  ]
+                }
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "body": null
+            }
+          ]
+        },
+        {
+          "name": "Get All Materials",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/material",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "material"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Material By Id",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/material/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "material",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get By Category",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/material/category/PLASTICO",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "material",
+                "category",
+                "PLASTICO"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "(`/material`)\n\nGestiona los tipos de materiales reciclables y sus características, como peso, puntos y categoría. Es fundamental para calcular recompensas y clasificar reciclajes correctamente. Mantiene consistencia en los reportes del sistema.  \n**Debe ser ADMIN** (`hasRole(\"ADMIN\")`)"
+    },
+    {
+      "name": "Reporte Reciclaje",
+      "item": [
+        {
+          "name": "Create Reporte Reciclaje",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userId\": 1,\r\n  \"materialId\": 1,\r\n  \"fotoUrl\": \"https://img.com/foto.jpg\",\r\n  \"tamanoObjeto\": \"MEDIANO\",\r\n  \"numeroArticulos\": 3,\r\n  \"materialDetectadoIa\": true,\r\n  \"confianzaIa\": 0.92,\r\n  \"latitud\": -12.0464,\r\n  \"longitud\": -77.0428\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/reportes-reciclaje",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reportes-reciclaje"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Create Reporte Reciclaje",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"userId\": 1,\r\n  \"materialId\": 1,\r\n  \"fotoUrl\": \"https://img.com/foto.jpg\",\r\n  \"tamanoObjeto\": \"MEDIANO\",\r\n  \"numeroArticulos\": 3,\r\n  \"materialDetectadoIa\": true,\r\n  \"confianzaIa\": 0.92,\r\n  \"latitud\": -12.0464,\r\n  \"longitud\": -77.0428\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/reportes-reciclaje",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "reportes-reciclaje"
+                  ]
+                }
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "body": null
+            }
+          ]
+        },
+        {
+          "name": "Get All Reportes Reciclaje",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reportes-reciclaje",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reportes-reciclaje"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Reporte Reciclaje By Id",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reportes-reciclaje/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reportes-reciclaje",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Historial Por Usuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reportes-reciclaje/historial/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reportes-reciclaje",
+                "historial",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Reporte Reciclaje",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reportes-reciclaje/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reportes-reciclaje",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "StartFragment\n\n## (`/reportes-reciclaje`)\n\nPermiten registrar actividades de reciclaje realizadas por los usuarios, incluyendo ubicación y material reciclado. Son el núcleo funcional de la aplicación porque generan puntos y alimentan el ranking. También sirven para estadísticas y trazabilidad.  \n**Sí requiere autenticación** (`authenticated()`)"
+    },
+    {
+      "name": "Reporte Zona",
+      "item": [
+        {
+          "name": "Create Reporte Zona",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"latitude\": -12.0464,\r\n  \"longitude\": -77.0428,\r\n  \"descripcion\": \"Basura acumulada en la esquina\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/reportes-zona",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reportes-zona"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Create Reporte Zona",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"latitude\": -12.0464,\r\n  \"longitude\": -77.0428,\r\n  \"descripcion\": \"Basura acumulada en la esquina\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/reportes-zona",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "reportes-zona"
+                  ]
+                }
+              },
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "description": "",
+                  "type": "text"
+                }
+              ],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": "{\n    \"id\": 1,\n    \"latitude\": -12.0464,\n    \"longitude\": -77.0428,\n    \"descripcion\": \"Basura acumulada en la esquina\",\n    \"username\": \"pierotest\",\n    \"fecha\": \"2026-05-26T23:00:50.3928691\",\n    \"procesado\": false\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get All Reportes Zona",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reportes-zona",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reportes-zona"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Reporte",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reportes-zona/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reportes-zona",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "(`/reportes-zona`)\n\nPermiten reportar zonas con problemas ambientales o acumulación de residuos. Ayudan a identificar áreas críticas y fomentar la participación ciudadana en el cuidado ambiental. Mejoran el monitoreo comunitario.  \n**Sí requiere autenticación** (`authenticated()`)"
+    },
+    {
+      "name": "Desafíos",
+      "item": [
+        {
+          "name": "Create Desafío",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"titulo\": \"Reciclar botellas\",\r\n  \"descripcion\": \"Reciclar 20 botellas plasticas\",\r\n  \"categoria\": \"Reciclaje\",\r\n  \"meta_valor\": 20,\r\n  \"puntos\": 100,\r\n  \"fecha_inicio\": \"2026-05-26T10:00:00\",\r\n  \"fecha_fin\": \"2026-06-01T10:00:00\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/desafios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "desafios"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Create Desafío",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"titulo\": \"Reciclar botellas\",\r\n  \"descripcion\": \"Reciclar 20 botellas plasticas\",\r\n  \"categoria\": \"Reciclaje\",\r\n  \"meta_valor\": 20,\r\n  \"puntos\": 100,\r\n  \"fecha_inicio\": \"2026-05-26T10:00:00\",\r\n  \"fecha_fin\": \"2026-06-01T10:00:00\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/desafios",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "desafios"
+                  ]
+                }
+              },
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "description": "",
+                  "type": "text"
+                }
+              ],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": "{\n    \"id\": 1,\n    \"titulo\": \"Reciclar botellas\",\n    \"descripcion\": \"Reciclar 20 botellas plasticas\",\n    \"categoria\": \"Reciclaje\",\n    \"meta_valor\": 20,\n    \"puntos\": 100,\n    \"fecha_inicio\": \"2026-05-26T10:00:00\",\n    \"fecha_fin\": \"2026-06-01T10:00:00\",\n    \"activo\": true\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get All Desafios",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/desafios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "desafios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Desafio By Id",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/desafios/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "desafios",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Unirse Desafio",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/desafios/1/unirse?userId=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "desafios",
+                "1",
+                "unirse"
+              ],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "1"
+                },
+                {
+                  "key": "",
+                  "value": null,
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Desafio",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"titulo\": \"Nuevo desafio\",\r\n  \"descripcion\": \"Nueva descripcion\",\r\n  \"categoria\": \"Ecologia\",\r\n  \"activo\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/desafios/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "desafios",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "(`/desafios`)\n\nPermiten crear y gestionar retos ecológicos para incentivar la participación de los usuarios. Fomentan la gamificación y aumentan el compromiso con actividades sostenibles. También permiten interacción entre usuarios y objetivos compartidos.  \n**Crear desafío: ADMIN**  \n**Unirse: autenticado**"
+    },
+    {
+      "name": "Ranking",
+      "item": [
+        {
+          "name": "Get Ranking General",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ranking",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ranking"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Ranking Por Distrito",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ranking/distrito/Barranco",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ranking",
+                "distrito",
+                "Barranco"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "(`/ranking`)\n\nMuestra la clasificación de usuarios según sus puntos o actividad ecológica. Incentiva la competencia sana y motiva a los usuarios a participar más en reciclaje y desafíos. Ayuda a visualizar el impacto de la comunidad.  \n**Sí requiere autenticación** (`authenticated()`)"
+    },
+    {
+      "name": "Punto Mapa",
+      "item": [
+        {
+          "name": "Crear Punto Mapa",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"latitude\": -12.0464,\r\n  \"longitude\": -77.0428,\r\n  \"nombre\": \"Punto de reciclaje Miraflores\",\r\n  \"tipo\": \"ACOPIO_OFICIAL\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/puntos-mapa",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "puntos-mapa"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Crear Punto Mapa",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"latitude\": -12.0464,\r\n  \"longitude\": -77.0428,\r\n  \"nombre\": \"Punto de reciclaje Miraflores\",\r\n  \"tipo\": \"ACOPIO_OFICIAL\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/puntos-mapa",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "puntos-mapa"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, no-store, max-age=0, must-revalidate"
+                },
+                {
+                  "key": "Pragma",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "Expires",
+                  "value": "0"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 27 May 2026 02:55:46 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": 1,\n    \"latitude\": -12.0464,\n    \"longitude\": -77.0428,\n    \"nombre\": \"Punto de reciclaje Miraflores\",\n    \"tipo\": \"ACOPIO_OFICIAL\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get All Puntos Mapa",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/puntos-mapa",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "puntos-mapa"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Punto Mapa By Id",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/puntos-mapa/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "puntos-mapa",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Punto Mapa",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/puntos-mapa/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "puntos-mapa",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validar Ubicación",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/puntos-mapa/validar?lat=-12.0464&lng=-77.0428",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "puntos-mapa",
+                "validar"
+              ],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": "-12.0464"
+                },
+                {
+                  "key": "lng",
+                  "value": "-77.0428"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "(`/puntos-mapa`)  \nGestiona ubicaciones relacionadas con reciclaje, como puntos verdes o centros de acopio. Facilita a los usuarios encontrar lugares válidos para reciclar y mejora la integración geográfica de la aplicación. También permite validar ubicaciones.  \n**Crear: ADMIN**  \n**Consultar: autenticado**"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}

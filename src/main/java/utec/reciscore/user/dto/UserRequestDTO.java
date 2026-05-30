@@ -18,6 +18,7 @@ public class UserRequestDTO {
     private String email;
 
     @NotBlank(message = "La contraseña no puede estar vacía")
+    @Size(min=8, message="La contraseña debe tener al menos 8 caracteres")
     private String password;
 
     @NotBlank(message = "El nombre no puede estar vacío")
