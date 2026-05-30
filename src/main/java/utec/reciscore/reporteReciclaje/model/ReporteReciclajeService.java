@@ -42,16 +42,21 @@ public class ReporteReciclajeService {
         this.iaClient = iaClient;
         this.modelMapper = modelMapper;
 
-
         TypeMap<ReporteReciclaje, ReporteReciclajeResponseDTO> typeMap =
                 modelMapper.createTypeMap(ReporteReciclaje.class, ReporteReciclajeResponseDTO.class);
 
         typeMap.addMappings(mapper -> {
-            mapper.map(src -> src.getUsuario().getId(),             ReporteReciclajeResponseDTO::setUserId);
-            mapper.map(src -> src.getUsuario().getName(),           ReporteReciclajeResponseDTO::setUserName);
-            mapper.map(src -> src.getMaterial().getName(),          ReporteReciclajeResponseDTO::setMaterialNombre);
-            mapper.map(src -> src.getMaterial().getCategory().name(), ReporteReciclajeResponseDTO::setMaterialCategoria);
-            mapper.map(src -> src.getTamanoObjeto().name(),         ReporteReciclajeResponseDTO::setTamanoObjeto);
+            mapper.map(src -> src.getUsuario().getId(),   ReporteReciclajeResponseDTO::setUserId);
+            mapper.map(src -> src.getUsuario().getName(), ReporteReciclajeResponseDTO::setUserName);
+            mapper.map(src -> src.getMaterial().getName(), ReporteReciclajeResponseDTO::setMaterialNombre);
+        });
+
+        typeMap.setPostConverter(ctx -> {
+            ReporteReciclaje src = ctx.getSource();
+            ReporteReciclajeResponseDTO dst = ctx.getDestination();
+            dst.setMaterialCategoria(src.getMaterial().getCategory().name());
+            dst.setTamanoObjeto(src.getTamanoObjeto().name());
+            return dst;
         });
     }
 
@@ -71,13 +76,11 @@ public class ReporteReciclajeService {
         try {
             IaResponse iaResponse = iaClient.classify(dto.getFotoUrl());
             confianzaIa = iaResponse.getConfidence();
-
             String tipoDetectado = iaResponse.getTipoMaterial();
             String tipoReportado = material.getCategory().name();
             iaValida = tipoDetectado != null
                     && tipoDetectado.equalsIgnoreCase(tipoReportado)
                     && confianzaIa >= 0.7;
-
         } catch (Exception e) {
             iaValida = false;
         }
