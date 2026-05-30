@@ -1,6 +1,8 @@
 package utec.reciscore.reporteReciclaje.model;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Service;
 import utec.reciscore.ia.IaClient;
 import utec.reciscore.ia.IaResponse;
@@ -18,7 +20,6 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class ReporteReciclajeService {
 
     private final ReporteReciclajeRepository reporteRepository;
@@ -26,6 +27,33 @@ public class ReporteReciclajeService {
     private final MaterialRepository materialRepository;
     private final PuntoMapaService puntoMapaService;
     private final IaClient iaClient;
+    private final ModelMapper modelMapper;
+
+    public ReporteReciclajeService(ReporteReciclajeRepository reporteRepository,
+                                   UserRepository userRepository,
+                                   MaterialRepository materialRepository,
+                                   PuntoMapaService puntoMapaService,
+                                   IaClient iaClient,
+                                   ModelMapper modelMapper) {
+        this.reporteRepository = reporteRepository;
+        this.userRepository = userRepository;
+        this.materialRepository = materialRepository;
+        this.puntoMapaService = puntoMapaService;
+        this.iaClient = iaClient;
+        this.modelMapper = modelMapper;
+
+
+        TypeMap<ReporteReciclaje, ReporteReciclajeResponseDTO> typeMap =
+                modelMapper.createTypeMap(ReporteReciclaje.class, ReporteReciclajeResponseDTO.class);
+
+        typeMap.addMappings(mapper -> {
+            mapper.map(src -> src.getUsuario().getId(),             ReporteReciclajeResponseDTO::setUserId);
+            mapper.map(src -> src.getUsuario().getName(),           ReporteReciclajeResponseDTO::setUserName);
+            mapper.map(src -> src.getMaterial().getName(),          ReporteReciclajeResponseDTO::setMaterialNombre);
+            mapper.map(src -> src.getMaterial().getCategory().name(), ReporteReciclajeResponseDTO::setMaterialCategoria);
+            mapper.map(src -> src.getTamanoObjeto().name(),         ReporteReciclajeResponseDTO::setTamanoObjeto);
+        });
+    }
 
     public ReporteReciclajeResponseDTO crear(ReporteReciclajeRequestDTO dto) {
 
@@ -72,40 +100,27 @@ public class ReporteReciclajeService {
             userRepository.save(user);
         }
 
-        return toDto(reporteRepository.save(reporte));
+        return modelMapper.map(reporteRepository.save(reporte), ReporteReciclajeResponseDTO.class);
     }
 
     public List<ReporteReciclajeResponseDTO> obtenerTodos() {
-        return reporteRepository.findAll().stream().map(this::toDto).toList();
+        return reporteRepository.findAll().stream()
+                .map(r -> modelMapper.map(r, ReporteReciclajeResponseDTO.class))
+                .toList();
     }
 
     public List<ReporteReciclajeResponseDTO> obtenerPorUsuario(Long userId) {
-        return reporteRepository.findByUsuarioId(userId).stream().map(this::toDto).toList();
+        return reporteRepository.findByUsuarioId(userId).stream()
+                .map(r -> modelMapper.map(r, ReporteReciclajeResponseDTO.class))
+                .toList();
     }
 
     public Optional<ReporteReciclajeResponseDTO> buscarPorId(Long id) {
-        return reporteRepository.findById(id).map(this::toDto);
+        return reporteRepository.findById(id)
+                .map(r -> modelMapper.map(r, ReporteReciclajeResponseDTO.class));
     }
 
     public void eliminar(Long id) {
         reporteRepository.deleteById(id);
-    }
-
-    private ReporteReciclajeResponseDTO toDto(ReporteReciclaje reporte) {
-        ReporteReciclajeResponseDTO dto = new ReporteReciclajeResponseDTO();
-        dto.setNumeroReporte(reporte.getNumeroReporte());
-        dto.setUserId(reporte.getUsuario().getId());
-        dto.setUserName(reporte.getUsuario().getName());
-        dto.setMaterialNombre(reporte.getMaterial().getName());
-        dto.setMaterialCategoria(reporte.getMaterial().getCategory().name());
-        dto.setFotoUrl(reporte.getFotoUrl());
-        dto.setTamanoObjeto(reporte.getTamanoObjeto().name());
-        dto.setNumeroArticulos(reporte.getNumeroArticulos());
-        dto.setMaterialDetectadoIa(reporte.getMaterialDetectadoIa());
-        dto.setConfianzaIa(reporte.getConfianzaIa());
-        dto.setValidadoIa(reporte.getValidadoIa());
-        dto.setGpsValidado(reporte.getGpsValidado());
-        dto.setFecha(reporte.getFecha());
-        return dto;
     }
 }

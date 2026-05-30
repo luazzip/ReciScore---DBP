@@ -1,6 +1,7 @@
 package utec.reciscore.material.model;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import utec.reciscore.material.dto.MaterialRequest;
 import utec.reciscore.material.dto.MaterialResponse;
@@ -14,49 +15,33 @@ import java.util.NoSuchElementException;
 public class MaterialService {
 
     private final MaterialRepository materialRepository;
+    private final ModelMapper modelMapper;
 
     public MaterialResponse create(MaterialRequest request) {
         if (materialRepository.existsByName(request.getName())) {
             throw new IllegalArgumentException("Ya existe un material con ese nombre.");
         }
-        Material material = Material.builder()
-                .name(request.getName())
-                .pointsPerKg(request.getPointsPerKg())
-                .weight(request.getWeight())
-                .category(request.getCategory())
-                .recyclable(request.getRecyclable())
-                .build();
-        return toResponse(materialRepository.save(material));
+        Material material = modelMapper.map(request, Material.class);
+        return modelMapper.map(materialRepository.save(material), MaterialResponse.class);
     }
 
     public List<MaterialResponse> getAll() {
         return materialRepository.findAll()
                 .stream()
-                .map(this::toResponse)
+                .map(m -> modelMapper.map(m, MaterialResponse.class))
                 .toList();
     }
 
     public MaterialResponse getById(Long id) {
         Material material = materialRepository.findById(id)
                 .orElseThrow(NoSuchElementException::new);
-        return toResponse(material);
+        return modelMapper.map(material, MaterialResponse.class);
     }
 
     public List<MaterialResponse> getByCategory(TipoMaterial category) {
         return materialRepository.findByCategory(category)
                 .stream()
-                .map(this::toResponse)
+                .map(m -> modelMapper.map(m, MaterialResponse.class))
                 .toList();
-    }
-
-    private MaterialResponse toResponse(Material material) {
-        return new MaterialResponse(
-                material.getId(),
-                material.getName(),
-                material.getPointsPerKg(),
-                material.getWeight(),
-                material.getCategory(),
-                material.getRecyclable()
-        );
     }
 }
