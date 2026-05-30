@@ -1,182 +1,164 @@
 package utec.reciscore.email;
 
+import jakarta.mail.internet.MimeMessage;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class EmailServiceTest {
 
-    @Mock
-    private JavaMailSender mailSender;
+    @Mock private JavaMailSender mailSender;
+    @Mock private TemplateEngine templateEngine;
+    @Mock private MimeMessage mimeMessage;
 
-    @InjectMocks
-    private EmailService emailService;
+    @InjectMocks private EmailService emailService;
 
     private final String EMAIL_USUARIO   = "juan@example.com";
     private final String NOMBRE_USUARIO  = "Juan";
     private final String MATERIAL_NOMBRE = "Plástico";
     private final int    PUNTOS_GANADOS  = 50;
 
-
-    @Test
-    void handleUsuarioRegistrado_debeEnviarCorreoConAsuntoBienvenida() {
-        UsuarioRegistradoEvent event =
-                new UsuarioRegistradoEvent(this, EMAIL_USUARIO, NOMBRE_USUARIO);
-
-        emailService.handleUsuarioRegistrado(event);
-
-        ArgumentCaptor<SimpleMailMessage> captor =
-                ArgumentCaptor.forClass(SimpleMailMessage.class);
-        verify(mailSender, times(1)).send(captor.capture());
-
-        SimpleMailMessage mensaje = captor.getValue();
-        assertThat(mensaje.getSubject()).isEqualTo("¡Bienvenido a ReciScore!");
+    @BeforeEach
+    void setUp() {
+        when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
     }
 
-    @Test
-    void handleUsuarioRegistrado_debeEnviarCorreoAlDestinatarioCorrecto() {
-        UsuarioRegistradoEvent event =
-                new UsuarioRegistradoEvent(this, EMAIL_USUARIO, NOMBRE_USUARIO);
-
-        emailService.handleUsuarioRegistrado(event);
-
-        ArgumentCaptor<SimpleMailMessage> captor =
-                ArgumentCaptor.forClass(SimpleMailMessage.class);
-        verify(mailSender).send(captor.capture());
-
-        assertThat(captor.getValue().getTo()).containsExactly(EMAIL_USUARIO);
-    }
+    // ─── handleUsuarioRegistrado ───────────────────────────────────────────────
 
     @Test
-    void handleUsuarioRegistrado_cuerpoDebeContenerNombreDelUsuario() {
+    void handleUsuarioRegistrado_debeProcesarPlantillaCorrectaYEnviarEmail() {
+        when(templateEngine.process(eq("email/bienvenido"), any(Context.class)))
+                .thenReturn("<html>Bienvenido Juan</html>");
+
         UsuarioRegistradoEvent event =
                 new UsuarioRegistradoEvent(this, EMAIL_USUARIO, NOMBRE_USUARIO);
-
         emailService.handleUsuarioRegistrado(event);
 
-        ArgumentCaptor<SimpleMailMessage> captor =
-                ArgumentCaptor.forClass(SimpleMailMessage.class);
-        verify(mailSender).send(captor.capture());
-
-        String cuerpo = captor.getValue().getText();
-        assertThat(cuerpo).contains(NOMBRE_USUARIO);
-    }
-
-    @Test
-    void handleUsuarioRegistrado_cuerpoDebeContenerMensajeDeBienvenida() {
-        UsuarioRegistradoEvent event =
-                new UsuarioRegistradoEvent(this, EMAIL_USUARIO, NOMBRE_USUARIO);
-
-        emailService.handleUsuarioRegistrado(event);
-
-        ArgumentCaptor<SimpleMailMessage> captor =
-                ArgumentCaptor.forClass(SimpleMailMessage.class);
-        verify(mailSender).send(captor.capture());
-
-        String cuerpo = captor.getValue().getText();
-        assertThat(cuerpo).contains("ReciScore");
+        verify(templateEngine).process(eq("email/bienvenido"), any(Context.class));
+        verify(mailSender).send(mimeMessage);
     }
 
     @Test
     void handleUsuarioRegistrado_debeLlamarMailSenderExactamenteUnaVez() {
+        when(templateEngine.process(eq("email/bienvenido"), any(Context.class)))
+                .thenReturn("<html>Bienvenido</html>");
+
+        UsuarioRegistradoEvent event =
+                new UsuarioRegistradoEvent(this, EMAIL_USUARIO, NOMBRE_USUARIO);
+        emailService.handleUsuarioRegistrado(event);
+
+        verify(mailSender, times(1)).send(mimeMessage);
+    }
+
+    @Test
+    void handleUsuarioRegistrado_noDebeLanzarExcepcionSiSMTPFalla() {
+        when(templateEngine.process(eq("email/bienvenido"), any(Context.class)))
+                .thenReturn("<html>Bienvenido</html>");
+        doThrow(new MailSendException("SMTP caído"))
+                .when(mailSender).send(any(MimeMessage.class));
+
         UsuarioRegistradoEvent event =
                 new UsuarioRegistradoEvent(this, EMAIL_USUARIO, NOMBRE_USUARIO);
 
+        // el catch interno no debe dejar explotar la app
         emailService.handleUsuarioRegistrado(event);
 
-        verify(mailSender, times(1)).send(any(SimpleMailMessage.class));
+        verify(mailSender).send(mimeMessage);
     }
 
-
-
-    @Test
-    void handleReciclajeValidado_debeEnviarCorreoConAsuntoCorrecto() {
-        ReciclajeValidadoEvent event =
-                new ReciclajeValidadoEvent(this, EMAIL_USUARIO, PUNTOS_GANADOS, MATERIAL_NOMBRE);
-
-        emailService.handleReciclajeValidado(event);
-
-        ArgumentCaptor<SimpleMailMessage> captor =
-                ArgumentCaptor.forClass(SimpleMailMessage.class);
-        verify(mailSender).send(captor.capture());
-
-        assertThat(captor.getValue().getSubject())
-                .isEqualTo("¡Reciclaje registrado en ReciScore!");
-    }
+    // ─── handleReciclajeValidado ───────────────────────────────────────────────
 
     @Test
-    void handleReciclajeValidado_debeEnviarCorreoAlEmailDelUsuario() {
+    void handleReciclajeValidado_debeProcesarPlantillaCorrectaYEnviarEmail() {
+        when(templateEngine.process(eq("email/reciclaje-validado"), any(Context.class)))
+                .thenReturn("<html>+50 puntos</html>");
+
         ReciclajeValidadoEvent event =
                 new ReciclajeValidadoEvent(this, EMAIL_USUARIO, PUNTOS_GANADOS, MATERIAL_NOMBRE);
-
         emailService.handleReciclajeValidado(event);
 
-        ArgumentCaptor<SimpleMailMessage> captor =
-                ArgumentCaptor.forClass(SimpleMailMessage.class);
-        verify(mailSender).send(captor.capture());
-
-        assertThat(captor.getValue().getTo()).containsExactly(EMAIL_USUARIO);
-    }
-
-    @Test
-    void handleReciclajeValidado_cuerpoDebeContenerPuntosGanados() {
-        ReciclajeValidadoEvent event =
-                new ReciclajeValidadoEvent(this, EMAIL_USUARIO, PUNTOS_GANADOS, MATERIAL_NOMBRE);
-
-        emailService.handleReciclajeValidado(event);
-
-        ArgumentCaptor<SimpleMailMessage> captor =
-                ArgumentCaptor.forClass(SimpleMailMessage.class);
-        verify(mailSender).send(captor.capture());
-
-        assertThat(captor.getValue().getText())
-                .contains(String.valueOf(PUNTOS_GANADOS));
-    }
-
-    @Test
-    void handleReciclajeValidado_cuerpoDebeContenerNombreDelMaterial() {
-        ReciclajeValidadoEvent event =
-                new ReciclajeValidadoEvent(this, EMAIL_USUARIO, PUNTOS_GANADOS, MATERIAL_NOMBRE);
-
-        emailService.handleReciclajeValidado(event);
-
-        ArgumentCaptor<SimpleMailMessage> captor =
-                ArgumentCaptor.forClass(SimpleMailMessage.class);
-        verify(mailSender).send(captor.capture());
-
-        assertThat(captor.getValue().getText()).contains(MATERIAL_NOMBRE);
+        verify(templateEngine).process(eq("email/reciclaje-validado"), any(Context.class));
+        verify(mailSender).send(mimeMessage);
     }
 
     @Test
     void handleReciclajeValidado_debeLlamarMailSenderExactamenteUnaVez() {
+        when(templateEngine.process(eq("email/reciclaje-validado"), any(Context.class)))
+                .thenReturn("<html>+50 puntos</html>");
+
+        ReciclajeValidadoEvent event =
+                new ReciclajeValidadoEvent(this, EMAIL_USUARIO, PUNTOS_GANADOS, MATERIAL_NOMBRE);
+        emailService.handleReciclajeValidado(event);
+
+        verify(mailSender, times(1)).send(mimeMessage);
+    }
+
+    @Test
+    void handleReciclajeValidado_noDebeLanzarExcepcionSiSMTPFalla() {
+        when(templateEngine.process(eq("email/reciclaje-validado"), any(Context.class)))
+                .thenReturn("<html>+50 puntos</html>");
+        doThrow(new MailSendException("SMTP caído"))
+                .when(mailSender).send(any(MimeMessage.class));
+
         ReciclajeValidadoEvent event =
                 new ReciclajeValidadoEvent(this, EMAIL_USUARIO, PUNTOS_GANADOS, MATERIAL_NOMBRE);
 
         emailService.handleReciclajeValidado(event);
 
-        verify(mailSender, times(1)).send(any(SimpleMailMessage.class));
+        verify(mailSender).send(mimeMessage);
     }
 
     @Test
-    void handleReciclajeValidado_conCeroPuntosCuerpoDebeIndicarCero() {
+    void handleReciclajeValidado_conCeroPuntosDebeEnviarEmailIgual() {
+        when(templateEngine.process(eq("email/reciclaje-validado"), any(Context.class)))
+                .thenReturn("<html>+0 puntos</html>");
+
         ReciclajeValidadoEvent event =
                 new ReciclajeValidadoEvent(this, EMAIL_USUARIO, 0, MATERIAL_NOMBRE);
-
         emailService.handleReciclajeValidado(event);
 
-        ArgumentCaptor<SimpleMailMessage> captor =
-                ArgumentCaptor.forClass(SimpleMailMessage.class);
-        verify(mailSender).send(captor.capture());
+        verify(mailSender).send(mimeMessage);
+    }
 
-        assertThat(captor.getValue().getText()).contains("0");
+    // ─── handleRecuperacionContrasena ─────────────────────────────────────────
+
+    @Test
+    void handleRecuperacionContrasena_debeProcesarPlantillaCorrectaYEnviarEmail() {
+        when(templateEngine.process(eq("email/recuperacion-contrasena"), any(Context.class)))
+                .thenReturn("<html>Nueva contraseña: abc123</html>");
+
+        RecuperacionContrasenaEvent event =
+                new RecuperacionContrasenaEvent(this, EMAIL_USUARIO, NOMBRE_USUARIO, "abc123");
+        emailService.handleRecuperacionContrasena(event);
+
+        verify(templateEngine).process(eq("email/recuperacion-contrasena"), any(Context.class));
+        verify(mailSender).send(mimeMessage);
+    }
+
+    @Test
+    void handleRecuperacionContrasena_noDebeLanzarExcepcionSiSMTPFalla() {
+        when(templateEngine.process(eq("email/recuperacion-contrasena"), any(Context.class)))
+                .thenReturn("<html>Nueva contraseña</html>");
+        doThrow(new MailSendException("SMTP caído"))
+                .when(mailSender).send(any(MimeMessage.class));
+
+        RecuperacionContrasenaEvent event =
+                new RecuperacionContrasenaEvent(this, EMAIL_USUARIO, NOMBRE_USUARIO, "abc123");
+
+        emailService.handleRecuperacionContrasena(event);
+
+        verify(mailSender).send(mimeMessage);
     }
 }
