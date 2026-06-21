@@ -92,7 +92,7 @@ public class ReporteZonaService {
 
         reporteZonaRepository.saveAll(allReports);
         ReporteZonaResponseDTO response = modelMapper.map(saved, ReporteZonaResponseDTO.class);
-        response.setUsername(user.getUsername());
+        response.setUsername(user.getDisplayUsername());
         return response;
     }
 
@@ -110,7 +110,7 @@ public class ReporteZonaService {
                                     ReporteZonaResponseDTO.class
                             );
                     dto.setUsername(
-                            reporte.getUser().getUsername()
+                            reporte.getUser().getDisplayUsername()
                     );
 
                     return dto;

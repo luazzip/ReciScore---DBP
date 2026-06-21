@@ -42,6 +42,7 @@ class AuthServiceTest {
         loginDTO.setPassword("123456");
 
         user = new User();
+        user.setId(1L);
         user.setEmail("luis@gmail.com");
         user.setPassword("hashedPassword");
         user.setName("Luis Nieva");

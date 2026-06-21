@@ -33,13 +33,13 @@ class AuthControllerTest {
     void setUp() {
         registerDTO = new RegisterRequestDTO();
         registerDTO.setEmail("luis@gmail.com");
-        registerDTO.setPassword("123456");
+        registerDTO.setPassword("12345678");
         registerDTO.setName("Luis Nieva");
         registerDTO.setUsername("luisnieva");
 
         loginDTO = new LoginRequestDTO();
         loginDTO.setEmail("luis@gmail.com");
-        loginDTO.setPassword("123456");
+        loginDTO.setPassword("12345678");
 
         authResponse = new AuthResponseDTO("token123", "refresh123");
     }

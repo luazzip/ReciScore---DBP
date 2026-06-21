@@ -21,8 +21,11 @@ public class DesafioService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    // crear desafio
     public DetailDesafioResponse createDesafio(CreateDesafioRequest request){
+        if (desafioRepository.existsByCategoria(request.getCategoria())) {
+            throw new IllegalArgumentException("Ya existe un desafío activo para esta categoría");
+        }
+
         if(request.getFecha_fin().isBefore(request.getFecha_inicio())){
             throw new IllegalArgumentException("La fecha de fin no puede ser anterior a la fecha de inicio");
         }
@@ -32,7 +35,6 @@ public class DesafioService {
         Desafio saved=desafioRepository.save(desafio);
         return modelMapper.map(saved,DetailDesafioResponse.class);
     }
-
 
     // obtener desafios
     public List<ListDesafioResponse> findAll() {

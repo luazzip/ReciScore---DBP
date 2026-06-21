@@ -1,6 +1,8 @@
 package utec.reciscore.reporteReciclaje.model;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import utec.reciscore.ia.IaClient;
 import utec.reciscore.ia.IaResponse;
@@ -29,8 +31,7 @@ public class ReporteReciclajeService {
 
     public ReporteReciclajeResponseDTO crear(ReporteReciclajeRequestDTO dto) {
 
-        User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
+        User user = getUsuarioAutenticado();
 
         Material material = materialRepository.findById(dto.getMaterialId())
                 .orElseThrow(() -> new NoSuchElementException("Material no encontrado"));
@@ -89,6 +90,17 @@ public class ReporteReciclajeService {
 
     public void eliminar(Long id) {
         reporteRepository.deleteById(id);
+    }
+
+    private User getUsuarioAutenticado() {
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
+        String email = authentication.getName();
+
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
     }
 
     private ReporteReciclajeResponseDTO toDto(ReporteReciclaje reporte) {

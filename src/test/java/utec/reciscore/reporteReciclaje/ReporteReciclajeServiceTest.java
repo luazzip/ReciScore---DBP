@@ -6,6 +6,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import utec.reciscore.ia.IaClient;
 import utec.reciscore.ia.IaResponse;
 import utec.reciscore.material.infrastructure.MaterialRepository;
@@ -82,7 +85,6 @@ class ReporteReciclajeServiceTest {
         reporte.setFecha(LocalDateTime.now());
 
         requestDTO = new ReporteReciclajeRequestDTO();
-        requestDTO.setUserId(1L);
         requestDTO.setMaterialId(1L);
         requestDTO.setFotoUrl("http://foto.com/foto.jpg");
         requestDTO.setTamanoObjeto(TamanoObjeto.PEQUENO);
@@ -97,9 +99,18 @@ class ReporteReciclajeServiceTest {
         lenient().when(iaClient.classify(anyString())).thenReturn(iaResponse);
     }
 
+    private void mockAuth(String email) {
+        Authentication auth = mock(Authentication.class);
+        when(auth.getName()).thenReturn(email);
+        SecurityContext ctx = mock(SecurityContext.class);
+        when(ctx.getAuthentication()).thenReturn(auth);
+        SecurityContextHolder.setContext(ctx);
+    }
+
     @Test
     void shouldAddPointsWhenGpsAndIaAreValid() {
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        mockAuth(user.getEmail());
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         when(materialRepository.findById(1L)).thenReturn(Optional.of(material));
         when(puntoMapaService.estaEnZonaValida(anyDouble(), anyDouble())).thenReturn(true);
         when(reporteRepository.save(any())).thenReturn(reporte);
@@ -114,7 +125,8 @@ class ReporteReciclajeServiceTest {
 
     @Test
     void shouldNotAddPointsWhenGpsIsInvalid() {
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        mockAuth(user.getEmail());
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         when(materialRepository.findById(1L)).thenReturn(Optional.of(material));
         when(puntoMapaService.estaEnZonaValida(anyDouble(), anyDouble())).thenReturn(false);
         when(reporteRepository.save(any())).thenReturn(reporte);
@@ -128,6 +140,7 @@ class ReporteReciclajeServiceTest {
 
     @Test
     void shouldNotAddPointsWhenIaValidationFails() {
+        mockAuth(user.getEmail());
         reporte.setMaterialDetectadoIa(false);
         reporte.setValidadoIa(false);
         IaResponse iaFail = new IaResponse();
@@ -136,7 +149,7 @@ class ReporteReciclajeServiceTest {
         iaFail.setRecyclable(true);
         lenient().when(iaClient.classify(anyString())).thenReturn(iaFail);
 
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         when(materialRepository.findById(1L)).thenReturn(Optional.of(material));
         when(puntoMapaService.estaEnZonaValida(anyDouble(), anyDouble())).thenReturn(true);
         when(reporteRepository.save(any())).thenReturn(reporte);
@@ -150,7 +163,8 @@ class ReporteReciclajeServiceTest {
 
     @Test
     void shouldThrowExceptionWhenUserDoesNotExist() {
-        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+        mockAuth("noexiste@reciscore.com");
+        when(userRepository.findByEmail("noexiste@reciscore.com")).thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class,
                 () -> reporteService.crear(requestDTO));
@@ -160,7 +174,8 @@ class ReporteReciclajeServiceTest {
 
     @Test
     void shouldThrowExceptionWhenMaterialDoesNotExist() {
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        mockAuth(user.getEmail());
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         when(materialRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class,
@@ -171,8 +186,9 @@ class ReporteReciclajeServiceTest {
 
     @Test
     void shouldApplyMultiplierWhenCalculatingPoints() {
+        mockAuth(user.getEmail());
         user.setMultiplier(2.0);
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         when(materialRepository.findById(1L)).thenReturn(Optional.of(material));
         when(puntoMapaService.estaEnZonaValida(anyDouble(), anyDouble())).thenReturn(true);
         when(reporteRepository.save(any())).thenReturn(reporte);

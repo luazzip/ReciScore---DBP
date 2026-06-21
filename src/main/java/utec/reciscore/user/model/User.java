@@ -79,6 +79,7 @@ public class User implements UserDetails {
     }
 
     @Override public String getUsername() { return email; }  // Spring usa email como username
+    public String getDisplayUsername() { return this.username; }
     @Override public boolean isAccountNonExpired()     { return true; }
     @Override public boolean isAccountNonLocked()      { return true; }
     @Override public boolean isCredentialsNonExpired() { return true; }

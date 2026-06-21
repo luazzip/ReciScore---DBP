@@ -59,7 +59,6 @@ class ReporteReciclajeControllerTest {
         responseDTO.setFecha(LocalDateTime.now());
 
         requestDTO = new ReporteReciclajeRequestDTO();
-        requestDTO.setUserId(1L);
         requestDTO.setMaterialId(1L);
         requestDTO.setFotoUrl("http://foto.com/foto.jpg");
         requestDTO.setTamanoObjeto(TamanoObjeto.PEQUENO);
@@ -77,7 +76,7 @@ class ReporteReciclajeControllerTest {
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.numeroReporte").value(1));
     }
 

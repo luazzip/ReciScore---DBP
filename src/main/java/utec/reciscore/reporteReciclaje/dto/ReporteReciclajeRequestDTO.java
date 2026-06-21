@@ -9,9 +9,6 @@ import utec.reciscore.reporteReciclaje.model.TamanoObjeto;
 @NoArgsConstructor
 public class ReporteReciclajeRequestDTO {
 
-    @NotNull(message = "El usuario es obligatorio")
-    private Long userId;
-
     @NotNull(message = "El material es obligatorio")
     private Long materialId;
 

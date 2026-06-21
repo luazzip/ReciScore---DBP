@@ -33,7 +33,6 @@ public class UserService implements UserDetailsService {
     }
 
 
-    //create
     public UserResponseDTO create(UserRequestDTO dto) {
 
         if (userRepository.existsByEmail(dto.getEmail())) {
@@ -53,17 +52,17 @@ public class UserService implements UserDetailsService {
         return modelMapper.map(savedUser, UserResponseDTO.class);
     }
 
-    //getById
     public UserResponseDTO getById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
         return modelMapper.map(user, UserResponseDTO.class);
     }
 
-    //update
     public UserResponseDTO update(Long id, UserUpdateDTO dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
+
+        checkOwnerOrAdmin(user, "No puedes editar otra cuenta");
 
         if (dto.getName() != null) user.setName(dto.getName());
         if (dto.getProfilePicture() != null) user.setProfilePicture(dto.getProfilePicture());
@@ -77,6 +76,12 @@ public class UserService implements UserDetailsService {
         User userToDelete = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
 
+        checkOwnerOrAdmin(userToDelete, "No puedes eliminar otra cuenta");
+
+        userRepository.delete(userToDelete);
+    }
+
+    private void checkOwnerOrAdmin(User target, String mensajeError) {
         Authentication authentication = SecurityContextHolder
                 .getContext()
                 .getAuthentication();
@@ -88,12 +93,10 @@ public class UserService implements UserDetailsService {
                 .stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
 
-        boolean isSameUser = userToDelete.getEmail().equals(currentEmail);
+        boolean isSameUser = target.getEmail().equals(currentEmail);
 
         if (!isAdmin && !isSameUser) {
-            throw new AccessDeniedException("No puedes eliminar otra cuenta");
+            throw new AccessDeniedException(mensajeError);
         }
-
-        userRepository.delete(userToDelete);
     }
 }
