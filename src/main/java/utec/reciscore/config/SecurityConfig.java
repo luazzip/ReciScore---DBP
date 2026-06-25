@@ -46,6 +46,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/puntos-mapa/**").hasRole("ADMIN")
 
                         .requestMatchers("/reportes-reciclaje/**").authenticated()
+                        .requestMatchers("/upload/**").authenticated()
                         .requestMatchers("/desafios/*/unirse").authenticated()
                         .requestMatchers("/reciclajes/**").authenticated()
                         .requestMatchers(HttpMethod.POST, "/reportes-zona/**")

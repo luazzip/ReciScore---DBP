@@ -88,4 +88,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 new ErrorResponse(500, "Internal Server Error", "Error inesperado", req.getRequestURI()));
     }
+    @ExceptionHandler(UploadException.class)
+    public ResponseEntity<ErrorResponse> handleUpload(
+            UploadException ex, HttpServletRequest req) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ErrorResponse(400, "Upload Failed", ex.getMessage(), req.getRequestURI()));
+    }
 }
