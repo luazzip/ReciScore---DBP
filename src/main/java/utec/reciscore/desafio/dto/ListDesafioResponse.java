@@ -19,4 +19,5 @@ public class ListDesafioResponse {
     private LocalDateTime fecha_inicio;
     private LocalDateTime fecha_fin;
     private Boolean activo;
+    private Boolean inscrito;
 }

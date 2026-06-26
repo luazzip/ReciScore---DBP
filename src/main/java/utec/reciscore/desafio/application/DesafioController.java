@@ -36,6 +36,16 @@ public class DesafioController {
         return ResponseEntity.ok(desafios);
     }
 
+    //Obtener desafios con estado de inscripcion del usuario
+    @GetMapping("/usuario/{userId}")
+    public ResponseEntity<List<ListDesafioResponse>> getDesafiosByUser(@PathVariable Long userId) {
+        List<ListDesafioResponse> desafios = desafioService.findAllWithUserStatus(userId);
+        if (desafios.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.ok(desafios);
+    }
+
     //Obtener desafios por id
     @GetMapping("/{id}")
     public ResponseEntity<DetailDesafioResponse> getDesafioById(@PathVariable Long id) {
@@ -48,6 +58,13 @@ public class DesafioController {
     public ResponseEntity<DetailDesafioResponse> unirse(@PathVariable Long id,@RequestParam Long userId) {
         DetailDesafioResponse response=desafioService.unirse(id,userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    //Desinscribirse de un desafio
+    @DeleteMapping("/{id}/desistir")
+    public ResponseEntity<DetailDesafioResponse> desistir(@PathVariable Long id, @RequestParam Long userId) {
+        DetailDesafioResponse response = desafioService.desistir(id, userId);
+        return ResponseEntity.ok(response);
     }
 
     //editar desafio

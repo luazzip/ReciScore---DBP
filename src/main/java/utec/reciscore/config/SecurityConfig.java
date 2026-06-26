@@ -37,22 +37,23 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
 
-                        .requestMatchers(HttpMethod.POST, "/material/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/desafios/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/puntos-mapa/**").hasRole("ADMIN")
+                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/h2-console/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/users").permitAll()
 
-                        .requestMatchers("/reportes-reciclaje/**").authenticated()
-                        .requestMatchers("/upload/**").authenticated()
-                        .requestMatchers("/desafios/*/unirse").authenticated()
-                        .requestMatchers("/reciclajes/**").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/reportes-zona/**")
-                        .authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/users/**").authenticated()
-                        .anyRequest().authenticated()
+                .requestMatchers("/reportes-reciclaje/**").authenticated()
+                .requestMatchers("/upload/**").authenticated()
+                .requestMatchers("/desafios/*/unirse").authenticated()
+                .requestMatchers("/reciclajes/**").authenticated()
+                .requestMatchers(HttpMethod.POST, "/reportes-zona/**").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/users/**").authenticated()
+
+                .requestMatchers(HttpMethod.POST, "/material/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/desafios/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/puntos-mapa/**").hasRole("ADMIN")
+
+                .anyRequest().authenticated()
 
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
