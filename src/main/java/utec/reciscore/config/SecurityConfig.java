@@ -53,6 +53,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/desafios/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/puntos-mapa/**").hasRole("ADMIN")
 
+                .requestMatchers(HttpMethod.GET, "/material/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/puntos-mapa/**").permitAll()
+
                 .anyRequest().authenticated()
 
                 )
