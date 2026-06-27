@@ -17,6 +17,7 @@ public class EmailService {
     @EventListener
     public void handleUsuarioRegistrado(UsuarioRegistradoEvent event) {
         SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("noreply@reciscore.com");
         message.setTo(event.getDestinatario());
         message.setSubject("¡Bienvenido a ReciScore!");
         message.setText(
@@ -33,6 +34,7 @@ public class EmailService {
     @EventListener
     public void handleReciclajeValidado(ReciclajeValidadoEvent event) {
         SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("noreply@reciscore.com");
         message.setTo(event.getEmailUsuario());
         message.setSubject("¡Reciclaje registrado en ReciScore!");
         message.setText("Has ganado " + event.getPuntosGanados() +
