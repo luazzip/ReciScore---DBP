@@ -51,7 +51,7 @@ VALUES
     (-12.0900, -77.0500, 'Zona Sucia Av. Brasil',     'ZONA_SUCIA'),
     (-12.1600, -77.0300, 'Zona Sucia Surco Norte',    'ZONA_SUCIA'),
     (-12.1050, -77.0150, 'Zona Sucia San Borja',      'ZONA_SUCIA')
-    ON CONFLICT DO NOTHING;
+    ON CONFLICT (nombre) DO NOTHING;
 
 -- ── DESAFIO ──────────────────────────────────────────────────
 INSERT INTO desafio (titulo, descripcion, categoria, meta_valor, puntos, fecha_inicio, fecha_fin, activo)

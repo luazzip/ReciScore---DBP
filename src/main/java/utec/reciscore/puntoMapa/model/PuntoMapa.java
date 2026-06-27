@@ -27,7 +27,7 @@ public class PuntoMapa {
     @Column(nullable = false)
     private Double longitude;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nombre;
 
     @Enumerated(EnumType.STRING)
