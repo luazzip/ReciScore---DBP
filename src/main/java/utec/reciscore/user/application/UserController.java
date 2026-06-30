@@ -5,24 +5,31 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import utec.reciscore.user.dto.UserImpactDTO;
 import utec.reciscore.user.dto.UserRequestDTO;
 import utec.reciscore.user.dto.UserResponseDTO;
 import utec.reciscore.user.dto.UserUpdateDTO;
-import utec.reciscore.user.model.User;
 import utec.reciscore.user.model.UserService;
-
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
-
 public class UserController {
     private final UserService userService;
 
     @PostMapping
     public ResponseEntity<UserResponseDTO> create(@RequestBody @Valid UserRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(dto));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDTO> getCurrent() {
+        return ResponseEntity.ok(userService.getCurrent());
+    }
+
+    @GetMapping("/me/impacto")
+    public ResponseEntity<UserImpactDTO> getCurrentImpact() {
+        return ResponseEntity.ok(userService.getImpact());
     }
 
     @GetMapping("/{id}")
@@ -41,6 +48,4 @@ public class UserController {
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }
-
-
 }

@@ -45,7 +45,6 @@ public class SecurityConfig {
                 .requestMatchers("/reportes-reciclaje/**").authenticated()
                 .requestMatchers("/upload/**").authenticated()
                 .requestMatchers("/desafios/*/unirse").authenticated()
-                .requestMatchers("/reciclajes/**").authenticated()
                 .requestMatchers(HttpMethod.POST, "/reportes-zona/**").authenticated()
                 .requestMatchers(HttpMethod.DELETE, "/users/**").authenticated()
 
