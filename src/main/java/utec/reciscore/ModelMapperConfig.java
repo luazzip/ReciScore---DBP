@@ -17,6 +17,11 @@ public class ModelMapperConfig {
 
     @Bean
     public RestTemplate restTemplate() {
-        return new RestTemplate();
+        RestTemplate rt = new RestTemplate();
+        var factory = new org.springframework.http.client.SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(10000);
+        factory.setReadTimeout(20000);
+        rt.setRequestFactory(factory);
+        return rt;
     }
 }
