@@ -53,6 +53,13 @@ public class GlobalExceptionHandler {
                 new ErrorResponse(400, "Invalid Operation", ex.getMessage(), req.getRequestURI()));
     }
 
+    @ExceptionHandler(UploadException.class)
+    public ResponseEntity<ErrorResponse> handleUpload(
+            UploadException ex, HttpServletRequest req) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ErrorResponse(400, "Upload Failed", ex.getMessage(), req.getRequestURI()));
+    }
+
     @ExceptionHandler(IaValidationException.class)
     public ResponseEntity<ErrorResponse> handleIaValidation(
             IaValidationException ex, HttpServletRequest req) {
@@ -85,13 +92,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneral(
             Exception ex, HttpServletRequest req) {
+        ex.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                new ErrorResponse(500, "Internal Server Error", "Error inesperado", req.getRequestURI()));
-    }
-    @ExceptionHandler(UploadException.class)
-    public ResponseEntity<ErrorResponse> handleUpload(
-            UploadException ex, HttpServletRequest req) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                new ErrorResponse(400, "Upload Failed", ex.getMessage(), req.getRequestURI()));
+                new ErrorResponse(500, "Internal Server Error", "Error inesperado: " + ex.getMessage(), req.getRequestURI()));
     }
 }

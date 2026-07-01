@@ -38,24 +38,16 @@ public class DesafioService {
     }
 
     public List<ListDesafioResponse> findAll() {
-        List<Desafio> desafios=desafioRepository.findAll();
-
-        if (desafios.isEmpty()) {
-            throw new NoSuchElementException("No existen desafios registrados");
-        }
+        List<Desafio> desafios = desafioRepository.findAll();
 
         return desafios.stream()
-                .map(desafio -> modelMapper.map(desafio,ListDesafioResponse.class))
+                .map(desafio -> modelMapper.map(desafio, ListDesafioResponse.class))
                 .toList();
     }
 
     public List<ListDesafioResponse> findAllWithUserStatus(Long userId) {
         List<Desafio> desafios = desafioRepository.findAll();
         List<UsuarioDesafio> inscripciones = desafioRepository.findInscripcionesByUsuarioId(userId);
-
-        if (desafios.isEmpty()) {
-            throw new NoSuchElementException("No existen desafios registrados");
-        }
 
         return desafios.stream()
                 .map(desafio -> {
