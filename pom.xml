@@ -113,11 +113,6 @@
             <version>1.19.8</version>
             <scope>test</scope>
         </dependency>
-        <dependency>                                                                                           22.114 tokens
-            <groupId>me.paulschwarz</groupId>                                                                  11% used
-            <artifactId>spring-dotenv</artifactId>                                                             $0.00 spent
-            <version>4.0.0</version>
-        </dependency>
         <dependency>
             <groupId>com.cloudinary</groupId>
             <artifactId>cloudinary-http5</artifactId>
