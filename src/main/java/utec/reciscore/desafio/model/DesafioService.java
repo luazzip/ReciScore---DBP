@@ -158,6 +158,7 @@ public class DesafioService {
                 inscripcion.setCompletado(true);
                 User user = inscripcion.getUsuario();
                 user.setPoints(user.getPoints() + desafio.getPuntos());
+                user.setNivel(User.calcularNivel(user.getPoints()));
                 userRepository.save(user);
             }
 

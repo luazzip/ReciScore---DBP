@@ -56,6 +56,10 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private Integer nivel = 1;
 
+    public static int calcularNivel(int points) {
+        return Math.floorDiv(points, 2500) + 1;
+    }
+
     @Column(nullable = false)
     private Integer rachaDias = 0;
 
