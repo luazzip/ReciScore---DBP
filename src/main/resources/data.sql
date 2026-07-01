@@ -43,14 +43,25 @@ VALUES
 -- ── PUNTO_MAPA ───────────────────────────────────────────────
 INSERT INTO punto_mapa (latitude, longitude, nombre, tipo)
 VALUES
-    (-12.1219, -77.0282, 'Punto Verde Miraflores',  'ACOPIO_OFICIAL'),
-    (-12.1100, -77.0350, 'Ecopunto San Isidro',      'ACOPIO_OFICIAL'),
-    (-12.1500, -77.0200, 'Centro de Acopio Surco',   'ACOPIO_OFICIAL'),
-    (-12.1450, -77.0050, 'Punto Limpio La Molina',   'ACOPIO_OFICIAL'),
-    (-12.1300, -77.0180, 'Ecopunto Barranco',         'ACOPIO_OFICIAL'),
-    (-12.0900, -77.0500, 'Zona Sucia Av. Brasil',     'ZONA_SUCIA'),
-    (-12.1600, -77.0300, 'Zona Sucia Surco Norte',    'ZONA_SUCIA'),
-    (-12.1050, -77.0150, 'Zona Sucia San Borja',      'ZONA_SUCIA')
+    (-12.0943, -77.0407, 'Recolecc - San Isidro (Av. Javier Prado Este 560 Int. 1801-A)', 'ACOPIO_OFICIAL'),
+    (-12.0917, -77.0404, 'Samsung Electronics Perú - Juan de Arona 745', 'ACOPIO_OFICIAL'),
+    (-12.0926, -77.0360, 'Samsung Electronics Perú - Elmer Faucett 319', 'ACOPIO_OFICIAL'),
+    (-12.0950, -77.0440, 'Pluz Perú - Calle César López 155, Maranga', 'ACOPIO_OFICIAL'),
+    (-12.0378, -77.0452, 'Pluz Perú - Av. Próceres de la Independencia 3045', 'ACOPIO_OFICIAL'),
+    (-12.0552, -77.0672, 'Pluz Perú - Conde de Superunda c/ Rufino Torrico', 'ACOPIO_OFICIAL'),
+    (-12.0787, -77.0868, 'Pluz Perú - Av. Sáenz Peña 1018', 'ACOPIO_OFICIAL'),
+    (-12.0519, -77.1016, 'Pluz Perú - Av. Argentina 3093', 'ACOPIO_OFICIAL'),
+    (-12.1219, -77.0282, 'Miraflores - General Córdova 556 (Parque Blume)', 'ACOPIO_OFICIAL'),
+    (-12.1180, -77.0335, 'Miraflores - Mariscal Castilla 640 Urb. Aurora', 'ACOPIO_OFICIAL'),
+    (-12.1235, -77.0308, 'Miraflores - Ca. Enrique Palacios 557', 'ACOPIO_OFICIAL'),
+    (-12.1114, -77.0296, 'San Isidro - estación de reciclaje y punto ecológico', 'ACOPIO_OFICIAL'),
+    (-12.1098, -77.0372, 'San Isidro - estación de reciclaje y punto ecológico', 'ACOPIO_OFICIAL'),
+    (-12.1506, -77.0227, 'Surco - punto de acopio de reciclables', 'ACOPIO_OFICIAL'),
+    (-12.0922, -77.0438, 'San Borja - punto de acopio de reciclables', 'ACOPIO_OFICIAL'),
+    (-12.0719, -77.0534, 'Cercado de Lima - punto de acopio de reciclables', 'ACOPIO_OFICIAL'),
+    (-12.0835, -77.0331, 'Zona Sucia Parque Kennedy', 'ZONA_SUCIA'),
+    (-12.0948, -77.0237, 'Zona Sucia Av. Arequipa - Lince', 'ZONA_SUCIA'),
+    (-12.0762, -77.0589, 'Zona Sucia Av. Colonial - Cercado', 'ZONA_SUCIA')
     ON CONFLICT (nombre) DO NOTHING;
 
 -- ── DESAFIO ──────────────────────────────────────────────────

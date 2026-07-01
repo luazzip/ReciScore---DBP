@@ -48,19 +48,25 @@ public class UserService implements UserDetailsService {
 
         User user = modelMapper.map(dto, User.class);
         User savedUser = userRepository.save(user);
-        return modelMapper.map(savedUser, UserResponseDTO.class);
+        UserResponseDTO response = modelMapper.map(savedUser, UserResponseDTO.class);
+        response.setNivel(User.calcularNivel(response.getPoints()));
+        return response;
     }
 
     public UserResponseDTO getById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
-        return modelMapper.map(user, UserResponseDTO.class);
+        UserResponseDTO response = modelMapper.map(user, UserResponseDTO.class);
+        response.setNivel(User.calcularNivel(response.getPoints()));
+        return response;
     }
 
     // NUEVO: devuelve el usuario autenticado actual (a partir del JWT/SecurityContext)
     public UserResponseDTO getCurrent() {
         User user = getAuthenticatedUser();
-        return modelMapper.map(user, UserResponseDTO.class);
+        UserResponseDTO response = modelMapper.map(user, UserResponseDTO.class);
+        response.setNivel(User.calcularNivel(response.getPoints()));
+        return response;
     }
 
     // NUEVO: calcula el impacto ambiental del usuario autenticado actual
@@ -137,7 +143,9 @@ public class UserService implements UserDetailsService {
         if (dto.getProfilePicture() != null) user.setProfilePicture(dto.getProfilePicture());
         if (dto.getLocation() != null) user.setLocation(dto.getLocation());
 
-        return modelMapper.map(userRepository.save(user), UserResponseDTO.class);
+        UserResponseDTO response = modelMapper.map(userRepository.save(user), UserResponseDTO.class);
+        response.setNivel(User.calcularNivel(response.getPoints()));
+        return response;
     }
 
     public void delete(Long id) {

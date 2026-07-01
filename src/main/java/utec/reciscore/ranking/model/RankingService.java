@@ -26,7 +26,7 @@ public class RankingService {
                         u.getName(),
                         u.getPoints(),
                         u.getLocation(),
-                        u.getNivel(),
+                        User.calcularNivel(u.getPoints()),
                         posicion.getAndIncrement()
                 ))
                 .toList();
@@ -43,7 +43,7 @@ public class RankingService {
                         u.getName(),
                         u.getPoints(),
                         u.getLocation(),
-                        u.getNivel(),
+                        User.calcularNivel(u.getPoints()),
                         posicion.getAndIncrement()
                 ))
                 .toList();

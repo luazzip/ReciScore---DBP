@@ -72,6 +72,7 @@ public class ReporteReciclajeService {
             double pesoTotal = material.getPointsPerKg() * dto.getNumeroArticulos();
             int puntosGanados = (int) Math.round(pesoTotal * user.getMultiplier());
             user.setPoints(user.getPoints() + puntosGanados);
+            user.setNivel(User.calcularNivel(user.getPoints()));
             userRepository.save(user);
 
             desafioService.actualizarProgreso(
