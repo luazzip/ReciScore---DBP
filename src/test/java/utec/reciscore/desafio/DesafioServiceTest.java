@@ -13,6 +13,7 @@ import utec.reciscore.desafio.dto.UpdateDesafioRequest;
 import utec.reciscore.desafio.infraestructure.DesafioRepository;
 import utec.reciscore.desafio.model.Desafio;
 import utec.reciscore.desafio.model.DesafioService;
+import utec.reciscore.desafio.model.UsuarioDesafio;
 import utec.reciscore.user.infrastructure.UserRepository;
 import utec.reciscore.user.model.User;
 
@@ -54,7 +55,7 @@ class DesafioServiceTest {
         desafio.setFecha_fin(LocalDateTime.now().plusDays(7));
         desafio.setMeta_valor(3);
         desafio.setPuntos(100);
-        desafio.setUsuariosInscritos(new HashSet<>());
+        desafio.setInscripciones(new HashSet<>());
 
         createRequest = new CreateDesafioRequest();
         createRequest.setTitulo("Recicla 3 botellas");
@@ -133,27 +134,28 @@ class DesafioServiceTest {
 
     @Test
     void shouldAddUserToDesafioWhenNotAlreadyEnrolled() {
-
         when(desafioRepository.findById(1L)).thenReturn(Optional.of(desafio));
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(desafioRepository.findInscripcionByUsuarioAndDesafio(1L, 1L)).thenReturn(Optional.empty());
         when(desafioRepository.save(any())).thenReturn(desafio);
         when(modelMapper.map(any(), eq(DetailDesafioResponse.class)))
                 .thenReturn(new DetailDesafioResponse());
 
-
         DetailDesafioResponse response = desafioService.unirse(1L, 1L);
 
-
         assertNotNull(response);
-        assertTrue(desafio.getUsuariosInscritos().contains(user));
         verify(desafioRepository).save(any());
     }
 
     @Test
     void shouldThrowExceptionWhenUserIsAlreadyEnrolled() {
-        desafio.getUsuariosInscritos().add(user);
+        UsuarioDesafio inscripcion = UsuarioDesafio.builder()
+                .usuario(user)
+                .desafio(desafio)
+                .build();
         when(desafioRepository.findById(1L)).thenReturn(Optional.of(desafio));
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(desafioRepository.findInscripcionByUsuarioAndDesafio(1L, 1L)).thenReturn(Optional.of(inscripcion));
 
         assertThrows(IllegalArgumentException.class,
                 () -> desafioService.unirse(1L, 1L));

@@ -21,4 +21,7 @@ public class DetailDesafioResponse {
     private LocalDateTime fecha_inicio;
     private LocalDateTime fecha_fin;
     private Boolean activo;
+    private Integer progresoActual;
+    private Boolean completado;
+    private Boolean inscrito;
 }

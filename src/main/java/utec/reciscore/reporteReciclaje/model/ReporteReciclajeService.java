@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import utec.reciscore.desafio.model.DesafioService;
 import utec.reciscore.ia.IaClient;
 import utec.reciscore.ia.IaResponse;
 import utec.reciscore.material.model.Material;
@@ -28,6 +29,7 @@ public class ReporteReciclajeService {
     private final MaterialRepository materialRepository;
     private final PuntoMapaService puntoMapaService;
     private final IaClient iaClient;
+    private final DesafioService desafioService;
 
     public ReporteReciclajeResponseDTO crear(ReporteReciclajeRequestDTO dto) {
 
@@ -71,6 +73,12 @@ public class ReporteReciclajeService {
             int puntosGanados = (int) Math.round(pesoTotal * user.getMultiplier());
             user.setPoints(user.getPoints() + puntosGanados);
             userRepository.save(user);
+
+            desafioService.actualizarProgreso(
+                    user.getId(),
+                    dto.getNumeroArticulos(),
+                    material.getCategory().name()
+            );
         }
 
         return toDto(reporteRepository.save(reporte));

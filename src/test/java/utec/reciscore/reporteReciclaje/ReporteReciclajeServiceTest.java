@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import utec.reciscore.desafio.model.DesafioService;
 import utec.reciscore.ia.IaClient;
 import utec.reciscore.ia.IaResponse;
 import utec.reciscore.material.infrastructure.MaterialRepository;
@@ -45,6 +46,8 @@ class ReporteReciclajeServiceTest {
     private PuntoMapaService puntoMapaService;
     @Mock
     private IaClient iaClient;
+    @Mock
+    private DesafioService desafioService;
     @InjectMocks
     private ReporteReciclajeService reporteService;
 
@@ -114,6 +117,7 @@ class ReporteReciclajeServiceTest {
         when(materialRepository.findById(1L)).thenReturn(Optional.of(material));
         when(puntoMapaService.estaEnZonaValida(anyDouble(), anyDouble())).thenReturn(true);
         when(reporteRepository.save(any())).thenReturn(reporte);
+        doNothing().when(desafioService).actualizarProgreso(anyLong(), anyInt(), anyString());
 
         ReporteReciclajeResponseDTO response = reporteService.crear(requestDTO);
 
@@ -121,6 +125,7 @@ class ReporteReciclajeServiceTest {
         assertTrue(response.getGpsValidado());
         assertTrue(user.getPoints() > 0);
         verify(userRepository).save(user);
+        verify(desafioService).actualizarProgreso(1L, 3, "PLASTICO");
     }
 
     @Test
@@ -192,10 +197,12 @@ class ReporteReciclajeServiceTest {
         when(materialRepository.findById(1L)).thenReturn(Optional.of(material));
         when(puntoMapaService.estaEnZonaValida(anyDouble(), anyDouble())).thenReturn(true);
         when(reporteRepository.save(any())).thenReturn(reporte);
+        doNothing().when(desafioService).actualizarProgreso(anyLong(), anyInt(), anyString());
 
         reporteService.crear(requestDTO);
 
         assertEquals(60, user.getPoints());
+        verify(desafioService).actualizarProgreso(anyLong(), anyInt(), anyString());
     }
 
     @Test

@@ -63,3 +63,38 @@ VALUES
     ('Héroe del Metal',     'Recicla 6 kg de metal (latas, aluminio).',       'RECICLAJE',     6,  220, '2026-07-01 00:00:00', '2026-07-31 23:59:59', false),
     ('Racha Semanal',       'Mantén una racha de 7 días consecutivos.',       'RACHA',     7,  300, '2026-06-01 00:00:00', '2026-12-31 23:59:59', true)
     ON CONFLICT (titulo) DO NOTHING;
+
+-- ── USER_DESAFIO (inscripciones con progreso) ─────────────────
+INSERT INTO user_desafio (user_id, desafio_id, progreso_actual, completado, activo, fecha_inscripcion)
+VALUES
+    (2, 1, 3, false, true, '2026-06-05 10:00:00'),   -- test: 3/5 en Reciclador Inicial
+    (2, 3, 2, false, true, '2026-06-10 14:30:00'),   -- test: 2/8 en Guardián del Vidrio
+    (3, 1, 5, true,  true, '2026-06-03 08:00:00'),   -- maría: ✅ completó Reciclador Inicial
+    (3, 2, 4, false, true, '2026-06-08 09:15:00'),   -- maría: 4/10 en Rey del Plástico
+    (4, 1, 1, false, true, '2026-06-15 16:45:00'),   -- carlos: 1/5 en Reciclador Inicial
+    (1, 1, 5, true,  true, '2026-06-02 07:00:00'),   -- admin: ✅ completó Reciclador Inicial
+    (1, 2, 8, false, true, '2026-06-05 09:00:00'),   -- admin: 8/10 en Rey del Plástico
+    (1, 6, 5, false, true, '2026-06-10 12:00:00'),   -- admin: 5/7 en Racha Semanal
+    (4, 6, 2, false, true, '2026-06-12 11:00:00')    -- carlos: 2/7 en Racha Semanal
+    ON CONFLICT DO NOTHING;
+
+-- ── REPORTE_RECICLAJE ────────────────────────────────────────────
+INSERT INTO reporte_reciclaje (user_id, material_id, foto_url, tamano_objeto, numero_articulos, material_detectado_ia, confianza_ia, validado_ia, gps_validado, fecha)
+VALUES
+    -- admin (1) — 4 reportes
+    (1, 1, 'https://example.com/foto1.jpg', 'MEDIANO', 3, true, 0.92, true,  true,  '2026-06-02 10:30:00'),
+    (1, 6, 'https://example.com/foto2.jpg', 'GRANDE',  2, true, 0.88, true,  true,  '2026-06-05 14:15:00'),
+    (1, 3, 'https://example.com/foto3.jpg', 'PEQUENO', 5, true, 0.95, true,  true,  '2026-06-10 09:00:00'),
+    (1, 7, 'https://example.com/foto4.jpg', 'PEQUENO', 4, true, 0.91, true,  false, '2026-06-15 16:45:00'),
+
+    -- test (2) — 2 reportes
+    (2, 5, 'https://example.com/foto5.jpg', 'GRANDE',  1, true, 0.87, true,  true,  '2026-06-08 11:00:00'),
+    (2, 4, 'https://example.com/foto6.jpg', 'MEDIANO', 2, false,0.45, false, true,  '2026-06-12 13:30:00'),
+
+    -- maría (3) — 2 reportes
+    (3, 2, 'https://example.com/foto7.jpg', 'PEQUENO', 6, true, 0.93, true,  true,  '2026-06-04 08:20:00'),
+    (3, 8, 'https://example.com/foto8.jpg', 'MEDIANO', 3, true, 0.89, true,  true,  '2026-06-11 17:00:00'),
+
+    -- carlos (4) — 2 reportes
+    (4, 9, 'https://example.com/foto9.jpg', 'MEDIANO', 2, false,0.62, false, true,  '2026-06-14 12:00:00'),
+    (4, 1, 'https://example.com/foto10.jpg','PEQUENO', 3, true, 0.96, true,  false, '2026-06-18 10:30:00');

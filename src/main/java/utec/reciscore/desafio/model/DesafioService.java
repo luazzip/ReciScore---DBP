@@ -3,6 +3,7 @@ package utec.reciscore.desafio.model;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import utec.reciscore.desafio.dto.CreateDesafioRequest;
 import utec.reciscore.desafio.dto.DetailDesafioResponse;
 import utec.reciscore.desafio.dto.ListDesafioResponse;
@@ -36,7 +37,6 @@ public class DesafioService {
         return modelMapper.map(saved,DetailDesafioResponse.class);
     }
 
-    // obtener desafios
     public List<ListDesafioResponse> findAll() {
         List<Desafio> desafios=desafioRepository.findAll();
 
@@ -49,10 +49,9 @@ public class DesafioService {
                 .toList();
     }
 
-    // obtener desafios con estado de inscripcion del usuario
     public List<ListDesafioResponse> findAllWithUserStatus(Long userId) {
         List<Desafio> desafios = desafioRepository.findAll();
-        List<Desafio> inscritos = desafioRepository.findByUsuariosInscritosId(userId);
+        List<UsuarioDesafio> inscripciones = desafioRepository.findInscripcionesByUsuarioId(userId);
 
         if (desafios.isEmpty()) {
             throw new NoSuchElementException("No existen desafios registrados");
@@ -61,14 +60,19 @@ public class DesafioService {
         return desafios.stream()
                 .map(desafio -> {
                     ListDesafioResponse response = modelMapper.map(desafio, ListDesafioResponse.class);
-                    response.setInscrito(inscritos.contains(desafio));
+                    inscripciones.stream()
+                            .filter(i -> i.getDesafio().getId().equals(desafio.getId()))
+                            .findFirst()
+                            .ifPresent(i -> {
+                                response.setInscrito(true);
+                                response.setProgresoActual(i.getProgresoActual());
+                                response.setCompletado(i.getCompletado());
+                            });
                     return response;
                 })
                 .toList();
     }
 
-
-    //obtener desafio por id
     public DetailDesafioResponse findById(Long id) {
         Desafio desafio=desafioRepository.findById(id)
                 .orElseThrow(()-> new NoSuchElementException("No se encontró el desafío con id: "+ id));
@@ -76,54 +80,95 @@ public class DesafioService {
         return modelMapper.map(desafio,DetailDesafioResponse.class);
     }
 
+    public DetailDesafioResponse findByIdWithUserStatus(Long id, Long userId) {
+        Desafio desafio = desafioRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("No se encontró el desafío con id: " + id));
 
-    // usuario se une o acepta desafio
-    public DetailDesafioResponse unirse(Long desafioId,Long userId) {
-        //buscar desafio
-        Desafio desafio=desafioRepository.findById(desafioId)
-                .orElseThrow(()-> new NoSuchElementException("No se encontró el desafío con id: "+ desafioId));
+        DetailDesafioResponse response = modelMapper.map(desafio, DetailDesafioResponse.class);
 
-        //buscar usuario
-        User user=userRepository.findById(userId)
-                .orElseThrow(()-> new NoSuchElementException("No se encontró el usuario con id: "+ userId));
+        desafioRepository.findInscripcionByUsuarioAndDesafio(userId, id)
+                .ifPresent(i -> {
+                    response.setInscrito(true);
+                    response.setProgresoActual(i.getProgresoActual());
+                    response.setCompletado(i.getCompletado());
+                });
 
-        //validar si ya esta inscrito
-        if (desafio.getUsuariosInscritos().contains(user)) {
-            throw new IllegalArgumentException("El usuario ya está inscrito en este desafío");
-        }
-
-        //agregar inscripcion
-        desafio.getUsuariosInscritos().add(user);
-        Desafio actualizado=desafioRepository.save(desafio);
-
-        return modelMapper.map(actualizado,DetailDesafioResponse.class);
+        return response;
     }
 
-
-    // usuario se retira de un desafio
-    public DetailDesafioResponse desistir(Long desafioId, Long userId) {
+    @Transactional
+    public DetailDesafioResponse unirse(Long desafioId, Long userId) {
         Desafio desafio = desafioRepository.findById(desafioId)
                 .orElseThrow(() -> new NoSuchElementException("No se encontró el desafío con id: " + desafioId));
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("No se encontró el usuario con id: " + userId));
 
-        if (!desafio.getUsuariosInscritos().contains(user)) {
-            throw new IllegalArgumentException("El usuario no está inscrito en este desafío");
-        }
+        desafioRepository.findInscripcionByUsuarioAndDesafio(userId, desafioId)
+                .ifPresent(i -> {
+                    throw new IllegalArgumentException("El usuario ya está inscrito en este desafío");
+                });
 
-        desafio.getUsuariosInscritos().remove(user);
-        Desafio actualizado = desafioRepository.save(desafio);
-        return modelMapper.map(actualizado, DetailDesafioResponse.class);
+        UsuarioDesafio inscripcion = UsuarioDesafio.builder()
+                .usuario(user)
+                .desafio(desafio)
+                .progresoActual(0)
+                .completado(false)
+                .activo(true)
+                .build();
+
+        desafio.getInscripciones().add(inscripcion);
+        desafioRepository.save(desafio);
+
+        return modelMapper.map(desafio, DetailDesafioResponse.class);
     }
 
-    //editar desafio
+    @Transactional
+    public DetailDesafioResponse desistir(Long desafioId, Long userId) {
+        Desafio desafio = desafioRepository.findById(desafioId)
+                .orElseThrow(() -> new NoSuchElementException("No se encontró el desafío con id: " + desafioId));
+
+        UsuarioDesafio inscripcion = desafio.getInscripciones().stream()
+                .filter(i -> i.getUsuario().getId().equals(userId) && i.getActivo())
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("El usuario no está inscrito en este desafío"));
+
+        desafio.getInscripciones().remove(inscripcion);
+        desafioRepository.save(desafio);
+
+        return modelMapper.map(desafio, DetailDesafioResponse.class);
+    }
+
+    @Transactional
+    public void actualizarProgreso(Long userId, int articulosReciclados, String materialCategoria) {
+        List<UsuarioDesafio> inscripciones = desafioRepository.findInscripcionesByUsuarioId(userId);
+
+        for (UsuarioDesafio inscripcion : inscripciones) {
+            if (inscripcion.getCompletado() || !inscripcion.getActivo()) continue;
+
+            Desafio desafio = inscripcion.getDesafio();
+            if (!desafio.getActivo()) continue;
+
+            String catDesafio = desafio.getCategoria();
+            if ("RECICLAJE".equals(catDesafio)) {
+                inscripcion.setProgresoActual(inscripcion.getProgresoActual() + articulosReciclados);
+            }
+
+            if (inscripcion.getProgresoActual() >= desafio.getMeta_valor()) {
+                inscripcion.setCompletado(true);
+                User user = inscripcion.getUsuario();
+                user.setPoints(user.getPoints() + desafio.getPuntos());
+                userRepository.save(user);
+            }
+
+            desafioRepository.save(desafio);
+        }
+    }
+
     public DetailDesafioResponse updateDesafio(Long id, UpdateDesafioRequest request) {
-        //buscar desafio
         Desafio desafio=desafioRepository.findById(id)
                 .orElseThrow(()-> new NoSuchElementException("No se encontró el desafío con id: "+ id));
 
-        //actualizar campos si vienen en el request
         if (request.getTitulo()!=null) {
             desafio.setTitulo(request.getTitulo());
         }

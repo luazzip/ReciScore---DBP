@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import utec.reciscore.user.model.User;
-
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,7 +27,7 @@ public class Desafio {
     @Column(nullable = false)
     private String descripcion;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false)
     private String categoria;
 
     @Min(value = 0, message = "La meta no puede ser negativa")
@@ -49,12 +47,6 @@ public class Desafio {
     @Column(nullable = false)
     private Boolean activo;
 
-    //relacion con usuarios
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "user_desafio",
-            joinColumns = @JoinColumn(name = "desafio_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private Set<User> usuariosInscritos = new HashSet<>();
+    @OneToMany(mappedBy = "desafio", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UsuarioDesafio> inscripciones = new HashSet<>();
 }

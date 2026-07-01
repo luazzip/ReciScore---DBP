@@ -14,10 +14,14 @@ import java.time.LocalDateTime;
 public class ListDesafioResponse {
     private Long id;
     private String titulo;
+    private String descripcion;
     private String categoria;
+    private Integer meta_valor;
     private Integer puntos;
     private LocalDateTime fecha_inicio;
     private LocalDateTime fecha_fin;
     private Boolean activo;
     private Boolean inscrito;
+    private Integer progresoActual;
+    private Boolean completado;
 }

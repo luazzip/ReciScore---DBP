@@ -46,10 +46,14 @@ public class DesafioController {
         return ResponseEntity.ok(desafios);
     }
 
-    //Obtener desafios por id
+    //Obtener desafios por id (con progreso del usuario si se pasa userId)
     @GetMapping("/{id}")
-    public ResponseEntity<DetailDesafioResponse> getDesafioById(@PathVariable Long id) {
-        DetailDesafioResponse response=desafioService.findById(id);
+    public ResponseEntity<DetailDesafioResponse> getDesafioById(
+            @PathVariable Long id,
+            @RequestParam(required = false) Long userId) {
+        DetailDesafioResponse response = (userId != null)
+                ? desafioService.findByIdWithUserStatus(id, userId)
+                : desafioService.findById(id);
         return ResponseEntity.ok(response);
     }
 
