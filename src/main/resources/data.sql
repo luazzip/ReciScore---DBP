@@ -10,19 +10,19 @@ INSERT INTO users (email, password, name, username, points, multiplier, profile_
 VALUES
     ('admin@reciscore.com',
      '$2a$10$qi/w1AsanqMfHVj3vhLdme4KmYr/cgjvSCItGYY63IivqWUiY8qcy',
-     'Admin General', 'admin', 500, 1.0, NULL, 'Miraflores', 20, 3, 7, NOW(), NOW(), 'ADMIN', 0),
+     'Admin General', 'admin', 500, 1.0, NULL, 'Miraflores', 14, 3, 7, NOW(), NOW(), 'ADMIN', 0),
 
     ('test@reciscore.com',
      '$2a$10$rcQTatR6wL7SvfGKcq8u..jKPLXgMrdQfSb.g48B0UrO9RG7uq/Cm',
-     'Usuario Test', 'testuser', 120, 1.0, NULL, 'San Isidro', 5, 1, 2, NOW(), NOW(), 'USER', 0),
+     'Usuario Test', 'testuser', 120, 1.0, NULL, 'San Isidro', 3, 1, 2, NOW(), NOW(), 'USER', 0),
 
     ('maria@reciscore.com',
      '$2a$10$EblZqNptyYvcLm/VwDptzu4CfbGWx0KmvLkp.MZ.cYuY8hgGW5gSq',
-     'María López', 'marialopez', 340, 1.0, NULL, 'Barranco', 14, 2, 5, NOW(), NOW(), 'USER', 0),
+     'María López', 'marialopez', 340, 1.0, NULL, 'Barranco', 9, 2, 5, NOW(), NOW(), 'USER', 0),
 
     ('carlos@reciscore.com',
      '$2a$10$EblZqNptyYvcLm/VwDptzu4CfbGWx0KmvLkp.MZ.cYuY8hgGW5gSq',
-     'Carlos Ríos', 'carlosrios', 80, 1.0, NULL, 'Surco', 3, 1, 0, NOW(), NOW(), 'USER', 0)
+     'Carlos Ríos', 'carlosrios', 80, 1.0, NULL, 'Surco', 5, 1, 0, NOW(), NOW(), 'USER', 0)
     ON CONFLICT (email) DO NOTHING;
 
 -- ── MATERIAL ─────────────────────────────────────────────────
@@ -59,6 +59,7 @@ VALUES
     (-12.1506, -77.0227, 'Surco - punto de acopio de reciclables', 'ACOPIO_OFICIAL'),
     (-12.0922, -77.0438, 'San Borja - punto de acopio de reciclables', 'ACOPIO_OFICIAL'),
     (-12.0719, -77.0534, 'Cercado de Lima - punto de acopio de reciclables', 'ACOPIO_OFICIAL'),
+    (-12.1824, -77.0107, 'Chorrillos Pedro García Cabrera - punto de acopio de reciclabes', 'ACOPIO_OFICIAL'),
     (-12.0835, -77.0331, 'Zona Sucia Parque Kennedy', 'ZONA_SUCIA'),
     (-12.0948, -77.0237, 'Zona Sucia Av. Arequipa - Lince', 'ZONA_SUCIA'),
     (-12.0762, -77.0589, 'Zona Sucia Av. Colonial - Cercado', 'ZONA_SUCIA')
@@ -80,16 +81,17 @@ INSERT INTO user_desafio (user_id, desafio_id, progreso_actual, completado, acti
 VALUES
     (2, 1, 3, false, true, '2026-06-05 10:00:00'),   -- test: 3/5 en Reciclador Inicial
     (2, 3, 2, false, true, '2026-06-10 14:30:00'),   -- test: 2/8 en Guardián del Vidrio
-    (3, 1, 5, true,  true, '2026-06-03 08:00:00'),   -- maría: ✅ completó Reciclador Inicial
+    (3, 1, 5, true,  true, '2026-06-03 08:00:00'),   -- maría:  completó Reciclador Inicial
     (3, 2, 4, false, true, '2026-06-08 09:15:00'),   -- maría: 4/10 en Rey del Plástico
     (4, 1, 1, false, true, '2026-06-15 16:45:00'),   -- carlos: 1/5 en Reciclador Inicial
-    (1, 1, 5, true,  true, '2026-06-02 07:00:00'),   -- admin: ✅ completó Reciclador Inicial
+    (1, 1, 5, true,  true, '2026-06-02 07:00:00'),   -- admin:  completó Reciclador Inicial
     (1, 2, 8, false, true, '2026-06-05 09:00:00'),   -- admin: 8/10 en Rey del Plástico
     (1, 6, 5, false, true, '2026-06-10 12:00:00'),   -- admin: 5/7 en Racha Semanal
     (4, 6, 2, false, true, '2026-06-12 11:00:00')    -- carlos: 2/7 en Racha Semanal
     ON CONFLICT DO NOTHING;
 
 -- ── REPORTE_RECICLAJE ────────────────────────────────────────────
+DELETE FROM reporte_reciclaje;
 INSERT INTO reporte_reciclaje (user_id, material_id, foto_url, tamano_objeto, numero_articulos, material_detectado_ia, confianza_ia, validado_ia, gps_validado, fecha)
 VALUES
     -- admin (1) — 4 reportes
