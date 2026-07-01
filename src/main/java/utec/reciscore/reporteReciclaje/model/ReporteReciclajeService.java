@@ -51,7 +51,7 @@ public class ReporteReciclajeService {
             String tipoReportado = material.getCategory().name();
             iaValida = tipoDetectado != null
                     && tipoDetectado.equalsIgnoreCase(tipoReportado)
-                    && confianzaIa >= 0.1;
+                    && confianzaIa >= 0.7;
 
         } catch (Exception e) {
             iaValida = false;

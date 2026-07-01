@@ -17,7 +17,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class PuntoMapaService {
-    private static final double radio_permitido_metros = 10000000000.0;
+    private static final double radio_permitido_metros = 50.0;
 
     private final PuntoMapaRepository puntoMapaRepository;
     private final ModelMapper modelMapper;
