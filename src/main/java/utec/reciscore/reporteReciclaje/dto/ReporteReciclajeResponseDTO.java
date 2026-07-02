@@ -21,5 +21,6 @@ public class ReporteReciclajeResponseDTO {
     private Boolean validadoIa;
     private Boolean gpsValidado;
     private Integer puntosGanados;
+    private Double pesoTotal;
     private LocalDateTime fecha;
 }

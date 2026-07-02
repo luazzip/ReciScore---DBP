@@ -141,6 +141,7 @@ public class ReporteReciclajeService {
             dto.setPuntosGanados(0);
         }
 
+        dto.setPesoTotal(Math.round((reporte.getMaterial().getWeight() * reporte.getNumeroArticulos()) * 1000.0) / 1000.0);
         dto.setFecha(reporte.getFecha());
         return dto;
     }
