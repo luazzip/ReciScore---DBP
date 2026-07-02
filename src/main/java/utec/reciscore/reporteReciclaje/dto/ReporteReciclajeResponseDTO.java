@@ -20,5 +20,6 @@ public class ReporteReciclajeResponseDTO {
     private Double confianzaIa;
     private Boolean validadoIa;
     private Boolean gpsValidado;
+    private Integer puntosGanados;
     private LocalDateTime fecha;
 }

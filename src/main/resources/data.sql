@@ -60,6 +60,7 @@ VALUES
     (-12.0922, -77.0438, 'San Borja - punto de acopio de reciclables', 'ACOPIO_OFICIAL'),
     (-12.0719, -77.0534, 'Cercado de Lima - punto de acopio de reciclables', 'ACOPIO_OFICIAL'),
     (-12.1824, -77.0107, 'Chorrillos Pedro García Cabrera - punto de acopio de reciclabes', 'ACOPIO_OFICIAL'),
+    (-12.134791, -77.021666, 'Barranco UTEC - punto de acopio oficial', 'ACOPIO_OFICIAL'),
     (-12.0835, -77.0331, 'Zona Sucia Parque Kennedy', 'ZONA_SUCIA'),
     (-12.0948, -77.0237, 'Zona Sucia Av. Arequipa - Lince', 'ZONA_SUCIA'),
     (-12.0762, -77.0589, 'Zona Sucia Av. Colonial - Cercado', 'ZONA_SUCIA')

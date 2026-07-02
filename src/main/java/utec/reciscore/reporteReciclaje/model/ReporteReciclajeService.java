@@ -71,6 +71,7 @@ public class ReporteReciclajeService {
         if (gpsValido && iaValida) {
             double pesoTotal = material.getPointsPerKg() * dto.getNumeroArticulos();
             int puntosGanados = (int) Math.round(pesoTotal * user.getMultiplier());
+            reporte.setPuntosGanados(puntosGanados);
             user.setPoints(user.getPoints() + puntosGanados);
             user.setNivel(User.calcularNivel(user.getPoints()));
             userRepository.save(user);
@@ -80,6 +81,8 @@ public class ReporteReciclajeService {
                     dto.getNumeroArticulos(),
                     material.getCategory().name()
             );
+        } else {
+            reporte.setPuntosGanados(0);
         }
 
         return toDto(reporteRepository.save(reporte));
@@ -126,6 +129,18 @@ public class ReporteReciclajeService {
         dto.setConfianzaIa(reporte.getConfianzaIa());
         dto.setValidadoIa(reporte.getValidadoIa());
         dto.setGpsValidado(reporte.getGpsValidado());
+
+        if (reporte.getPuntosGanados() != null) {
+            dto.setPuntosGanados(reporte.getPuntosGanados());
+        } else if (reporte.getValidadoIa() && reporte.getGpsValidado()) {
+            Material material = reporte.getMaterial();
+            User usuario = reporte.getUsuario();
+            double pesoTotal = material.getPointsPerKg() * reporte.getNumeroArticulos();
+            dto.setPuntosGanados((int) Math.round(pesoTotal * usuario.getMultiplier()));
+        } else {
+            dto.setPuntosGanados(0);
+        }
+
         dto.setFecha(reporte.getFecha());
         return dto;
     }

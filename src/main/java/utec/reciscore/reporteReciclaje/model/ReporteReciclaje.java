@@ -60,6 +60,8 @@ public class ReporteReciclaje {
     @Column(nullable = false)
     private Boolean gpsValidado;
 
+    private Integer puntosGanados;
+
     @Column(nullable = false)
     private LocalDateTime fecha;
 

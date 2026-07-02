@@ -49,6 +49,7 @@ public class DataInitializer implements ApplicationRunner {
         admin.setName("Admin General");
         admin.setUsername("admin");
         admin.setPoints(500);
+        admin.setNivel(User.calcularNivel(500));
         admin.setMultiplier(1.0);
         admin.setLocation("Miraflores");
         admin.setReciclajes(20);

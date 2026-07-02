@@ -57,7 +57,7 @@ public class User implements UserDetails {
     private Integer nivel = 1;
 
     public static int calcularNivel(int points) {
-        return Math.floorDiv(points, 2500) + 1;
+        return (int) Math.floor((1 + Math.sqrt(1 + 2.0 * points / 25.0)) / 2.0);
     }
 
     @Column(nullable = false)
